@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>More options - GitPi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  </head>
+  <body>
+    <div class="repo-2">
+      <h1>More options</h1>
+      <h3 class="path-2">Rename repository</h3>
+      <form method="POST">
+      <input name="old_name" placeholder="Old name" class="label">
+      <input name="new_name" placeholder="New name" class="label">
+      <input type="submit" value="Rename" class="button">
+      <br>
+      <h3 class="path-2">Change repository description</h3>
+      <form method="POST">
+      <input name="repo_name" placeholder="Repository name" class="label">
+      <input name="new_desc" placeholder="New description" class="label">
+      <input type="submit" value="Confirm" class="button">
+      <br>
+      <h3 class="path-2">Delete repository</h3>
+      <form method="POST">
+      <input name="name_1" placeholder="Repository name" class="label">
+      <input name="name_2" placeholder="Confirm name" class="label">
+      <input type="submit" value="Delete" class="red-button">
+      <br>
+      <br>
+      <a href="/" class="more-link-2">&#129044; Back&#10240;&#10240;</a>
+      <form method="POST">
+      <input type="submit" name="log_out" value="Log out" class="red-button">
+    </div>
+  </body>
+</html>
