@@ -1,5 +1,23 @@
 [
     [
+        "testing_123",
+        "Path: Korisnik@192.168.1.9:/home/pi/testing_123.git",
+        "No description",
+        "Korisnik@192.168.1.9:/home/pi/testing_123.git"
+    ],
+    [
+        "new_new_repo",
+        "Path: Korisnik@192.168.1.9:/home/pi/new_new_repo.git",
+        "sjhfsdjhfds",
+        "Korisnik@192.168.1.9:/home/pi/new_new_repo.git"
+    ],
+    [
+        "adsd",
+        "Path: Korisnik@192.168.1.9:/home/pi/adsd.git",
+        "wasd",
+        "Korisnik@192.168.1.9:/home/pi/adsd.git"
+    ],
+    [
         "change_desc",
         "Path: Korisnik@192.168.1.9:/home/pi/change_desc.git",
         "description changed",
@@ -10,12 +28,6 @@
         "Path: Korisnik@192.168.1.9:/home/pi/new_name.git",
         "rename me",
         "Korisnik@192.168.1.9:/home/pi/new_name.git"
-    ],
-    [
-        "new",
-        "Path: Korisnik@192.168.1.9:/home/pi/new.git",
-        "new repo",
-        "Korisnik@192.168.1.9:/home/pi/new.git"
     ],
     [
         "testing",

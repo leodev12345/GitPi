@@ -12,8 +12,8 @@
     <img src="{{url_for('static', filename='gitpi_logo.png')}}" class="logo-small">
     <h2 class="h2">GitPi</h2>
     <form method="POST">
-    <input name="text" placeholder="Name" class="label">
-    <input name="desc" placeholder="Description" class="label">
+    <input name="text" placeholder="Name" class="label" autocomplete="off">
+    <input name="desc" placeholder="Description" class="label" autocomplete="off">
     <input type="submit" value="Create" class="button">
     <a href="{{url_for('more')}}" class="more-link">&#65049;</a>
     </div>

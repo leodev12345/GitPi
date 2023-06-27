@@ -9,39 +9,45 @@ list=[]
 config_list=[]
 #charecters not allowed in repo names
 ilegal_charecters=[" ","#","<",">","$","+","%","!","`","&","*","|","{","}","[","]","@",":","/","\"","\\","\'","\(","\)","=","?","€",";",".",",","§","¤","ß","Ł","ł","÷","×","¸","¨","~","ˇ","^","˘","°","˛","˙","´","˝"]
-#load json values into the local list every time the program starts
+
+#load json values into the local array every time the program starts
 f=open("database/data.json")
 data=json.load(f)
 for i in data:
     list.append(tuple((i[0],i[1],i[2],i[3])))
 
+#load program config from json into local array
 with open("database/config.json", "r") as f:
     config_data=json.load(f)
 
+#useful variables
+config_password=config_data[0]
 config_path=config_data[1]
 config_ip=config_data[2]
 config_user=config_data[3]
 
-print(config_data)
-
+#app init
 app = Flask(__name__)
 
-#write values to data.json
+#function that writes all the repo data to data.json
 def write_json(arg):
     json_object=json.dumps(arg, indent=4)
     with open("database/data.json", "w") as file:
         file.write(json_object)
 
-#if form submitted
+#creating repos
 @app.route('/', methods=['POST'])
-def my_form_post():
+def create_repo():
     #collecting info
     text = request.form['text']
     desc = request.form['desc']
     #checking info
     if text!="" and any(ele in text for ele in ilegal_charecters)==False:
+        #set default description
         if desc=="":
             desc="No description"
+
+        #full path to the repo
         copy_text=config_user+"@"+config_ip+":"+config_path+text+".git"
 
         #create the repo on the server
@@ -51,104 +57,123 @@ def my_form_post():
         #os.system("cd "+dir_name)
         #os.system("git init --bare")
         
-        #add info to list
+        #add all the data to list and write it to data.json
         list.insert(0,tuple((text,"Path: "+copy_text,desc,copy_text)))
         write_json(list)
 
-    #refresh
-    return redirect(url_for('my_form_post'))
+    #refresh the website after form is submitted
+    return redirect(url_for('create_repo'))
 
-#show homepage
+#render the homepage
 @app.route("/")
-def template_test():
+def index_render():
+    #redirect to login page if the user isnt logged in
     if logged_in==True:
         return render_template('index.html', my_list=list)
     elif logged_in==False:
         return redirect(url_for('login_render'))
 
-#show more.html
+#render more options
 @app.route("/more")
 def more_render():
+    #redirect to login page if user isnt logged in
     if logged_in==True:
         return render_template('more.html')
     elif logged_in==False:
         return redirect(url_for('login_render'))
 
-#show login.html
+#render login page
 @app.route("/login")
 def login_render():
     return render_template('login.html')
 
-#check if password is correct
+#login page functionality
 @app.route("/login", methods=['POST'])
 def login():
+    #get the entered password and compare it to stored hashed password
     password=request.form['password']
-    result = bcrypt.checkpw(password.encode('utf-8'), config_data[0].encode('utf-8'))
+    result = bcrypt.checkpw(password.encode('utf-8'), config_password.encode('utf-8'))
+    #log in if password is correct
     if result==True:
         global logged_in
         logged_in=True
-        return redirect(url_for('template_test')) 
+        return redirect(url_for('index_render')) 
     else:
         return redirect(url_for('login_render'))
 
 
+# more options page functionality
 @app.route("/more", methods=['POST'])
 def more():
-
     #renaming repos
+    #check if the "rename" button is clicked
     if 'rename' in request.form:
+        #get all the data
         old_name = request.form['old_name']
         new_name = request.form['new_name']
-        if old_name!=new_name and new_name!="" and old_name!="" and " " not in old_name and " " not in new_name and any(ele in new_name for ele in ilegal_charecters)==False:
+        #check data
+        if old_name!=new_name and new_name!="" and old_name!="" and any(ele in new_name for ele in ilegal_charecters)==False:
             #rename repo on server
             #os.system("cd "+config_path)
             #os.system("mv "+old_name+".git"+" "+new_name+".git")
-        
-            result = [tup[0] for tup in list].index(old_name) #index of the tuple containing the old name
-            #change values
+
+            #get index of the tuple containing the old name
+            result = [tup[0] for tup in list].index(old_name)            
+            #get description that wont change
             desc = list[result][2]
+            #change all the necessary data
             path="Path: "+config_user+"@"+config_ip+":"+config_path+new_name+".git"
-            copy=config_user+"@"+config_ip+":"+config_path+new_name+".git"
-            #write new values
+            copy=config_user+"@"+config_ip+":"+config_path+new_name+".git" 
             list[result]=tuple((new_name,path,desc,copy))
+            #write data to data.json
             write_json(list)
 
     #deleting repos
+    #check if "delete" button is pressed
     elif 'remove' in request.form:
+        #get all the data
         delete_name = request.form['name_1']
         delete_name_confirm = request.form['name_2']
+        #check data
         if delete_name==delete_name_confirm and delete_name!="":
-            result = [tup[0] for tup in list].index(delete_name) #get index of the tuple that needs to be deleted
-            del list[result] #delete from list
-            #delete on device
-            #os.system("cd "+config_path)
-            #os.rmdir(delete_name+".git")
+            #get index of the tuple that needs to be deleted
+            result = [tup[0] for tup in list].index(delete_name)
+            #delete the tuple from the list
+            del list[result] 
+            #write data to data.json
             write_json(list)
 
     #changing repo description
+    #check if "confirm" button is clicked
     elif 'confirm' in request.form:
+        #get all the data
         repo_name = request.form['repo_name']
         new_desc = request.form['new_desc']
-        if 'confirm' in request.form and repo_name!="" and new_desc!="":
-            result = [tup[0] for tup in list].index(repo_name) #get the index of the tuple that contains the repo name
-            #get values that wont change
+        #check data
+        if repo_name!="" and new_desc!="":
+            #get the index of the tuple that contains the repo name
+            result = [tup[0] for tup in list].index(repo_name)
+            #get the values that wont change
             name=list[result][0]
             path=list[result][1]
             copy=list[result][3]
             #write new values
             list[result] = tuple((name,path,new_desc,copy))
+            #write data to data.json
             write_json(list)
     
     #logout
+    #check if "Log out" button is clicked
     elif 'logout' in request.form:    
+        #log out the user and redirect back to login.html
         global logged_in
         logged_in=False
         return redirect(url_for('login_render'))
     
-    #to refresh website
+    #refresh the website after form is submitted
     return render_template('more.html')
 
 
-#run
+#run the program(debug only!)
 if __name__ == '__main__':
     app.run(debug=True, port=80, host='0.0.0.0')

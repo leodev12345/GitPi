@@ -1,8 +1,8 @@
+//function to copy specified text to clipboard
 function copy(text) {
   var textArea = document.createElement("textarea");
   textArea.value = text;
 
-  // Avoid scrolling to bottom
   textArea.style.top = "0";
   textArea.style.left = "0";
   textArea.style.position = "fixed";

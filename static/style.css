@@ -1,5 +1,5 @@
 .topnav {
-  background-color: #002b36;
+  background-color: #282c34;
   overflow: hidden;
   padding:15px 15px;
   padding-left: 55px;
@@ -10,7 +10,7 @@
 body{
   margin: 0;
   padding: 0;
-  background-color: #073642;
+  background-color: #32363e;
   font-family: Arial, sans-serif;
 }
 .button{
@@ -95,7 +95,7 @@ form{
   display: inline;
 }
 .label{
-  background-color: #002b36;
+  background-color: #32363e;
   color: white;
   border: solid;
   border-color: white;
@@ -117,7 +117,7 @@ form{
   padding-bottom: 0px;
 }
 .repo{
-  background-color: #002b36;
+  background-color: #282c34;
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 15px;
@@ -130,7 +130,7 @@ form{
   margin-right: 20px;
 }
 .repo-2{
-  background-color: #002b36;
+  background-color: #282c34;
   padding-top: 5px;
   padding-bottom: 25px;
   padding-left: 15px;
@@ -144,7 +144,7 @@ form{
   text-align: center;
 }
 .login-div{
-  background-color: #002b36;
+  background-color: #282c34;
   padding-top: 25px;
   padding-bottom: 25px;
   border: none;
