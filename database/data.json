@@ -1,32 +1,26 @@
 [
     [
-        "sds",
-        "Path: pi@192.168.1.116:/home/pi/git/sds.git",
-        "bsbds",
-        "pi@192.168.1.116:/home/pi/git/sds.git"
+        "change_desc",
+        "Path: Korisnik@192.168.1.9:/home/pi/change_desc.git",
+        "description changed",
+        "Korisnik@192.168.1.9:/home/pi/change_desc.git"
     ],
     [
-        "ddds_ss",
-        "Path: pi@192.168.1.116:/home/pi/git/ddds_ss.git",
-        "No description",
-        "pi@192.168.1.116:/home/pi/git/ddds_ss.git"
+        "new_name",
+        "Path: Korisnik@192.168.1.9:/home/pi/new_name.git",
+        "rename me",
+        "Korisnik@192.168.1.9:/home/pi/new_name.git"
     ],
     [
-        "not test",
-        "Path: pi@192.168.1.116:/home/pi/git/not test.git",
-        "newdesc",
-        "pi@192.168.1.116:/home/pi/git/not test.git"
+        "new",
+        "Path: Korisnik@192.168.1.9:/home/pi/new.git",
+        "new repo",
+        "Korisnik@192.168.1.9:/home/pi/new.git"
     ],
     [
-        "newname",
-        "Path: pi@192.168.1.116:/home/pi/git/newname.git",
-        "it works",
-        "pi@192.168.1.116:/home/pi/git/newname.git"
-    ],
-    [
-        "Test",
-        "Path: pi@192.168.1.116:/home/pi/git/Test.git",
-        "No description",
-        "pi@192.168.1.116:/home/pi/git/Test.git"
+        "testing",
+        "Path: Korisnik@192.168.1.9:/home/pi/testing.git",
+        "YAYYYYY",
+        "Korisnik@192.168.1.9:/home/pi/testing.git"
     ]
 ]

@@ -10,27 +10,31 @@
     <div class="repo-2">
       <h1>More options</h1>
       <h3 class="path-2">Rename repository</h3>
-      <form method="POST">
+	  <form method="POST">
       <input name="old_name" placeholder="Old name" class="label">
       <input name="new_name" placeholder="New name" class="label">
-      <input type="submit" value="Rename" class="button">
-      <br>
+      <input type="submit" name="rename" value="Rename" class="button">
+	  </form>
+	  <br>
       <h3 class="path-2">Change repository description</h3>
-      <form method="POST">
+	  <form method="POST">
       <input name="repo_name" placeholder="Repository name" class="label">
       <input name="new_desc" placeholder="New description" class="label">
-      <input type="submit" value="Confirm" class="button">
-      <br>
+      <input type="submit" name="confirm" value="Confirm" class="button">
+	  </form>
+	  <br>
       <h3 class="path-2">Delete repository</h3>
-      <form method="POST">
+	  <form method="POST">
       <input name="name_1" placeholder="Repository name" class="label">
       <input name="name_2" placeholder="Confirm name" class="label">
-      <input type="submit" value="Delete" class="red-button">
-      <br>
+      <input type="submit" name="remove" value="Remove" class="red-button">
+	  </form>
+	  <br>
       <br>
       <a href="/" class="more-link-2">&#129044; Back&#10240;&#10240;</a>
-      <form method="POST">
-      <input type="submit" name="log_out" value="Log out" class="red-button">
+	  <form method="POST">
+      <input type="submit" name="logout" value="Log out" class="red-button">
+	  </form>
     </div>
   </body>
 </html>
