@@ -43,7 +43,7 @@ Homepage
 More options page
 ## Setup
 Dependencies
-- python 3 (I used 3.8 and 3.9)
+- Python 3 (I used 3.8 and 3.9)
 - Flask 
 - Bcrypt
 
