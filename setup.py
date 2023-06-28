@@ -31,6 +31,9 @@ if len(list)==0:
     print("Password set to "+password)
     #storage location setup
     path=input("Set storage location for your repositories: ")
+    #add the / at the end of the path if the user didnt already add it
+    if path[-1]!="/":
+        path=path+"/"
     list.append(path)
     print("Storage path set to: "+path)
     #print host ip adress

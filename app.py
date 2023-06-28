@@ -9,9 +9,11 @@ list=[]
 config_list=[]
 #charecters not allowed in repo names
 ilegal_charecters=[" ","#","<",">","$","+","%","!","`","&","*","|","{","}","[","]","@",":","/","\"","\\","\'","\(","\)","=","?","€",";",".",",","§","¤","ß","Ł","ł","÷","×","¸","¨","~","ˇ","^","˘","°","˛","˙","´","˝"]
+#get current working path 
 current_path=os.path.abspath(os.getcwd())
 
 #load json values into the local array every time the program starts
+#chdir to project working folder to avoid loading database from wrong path when the working dir changes
 os.chdir(current_path)
 f=open("database/data.json")
 data=json.load(f)
