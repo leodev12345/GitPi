@@ -2,6 +2,8 @@ import json
 import bcrypt
 import os
 import socket
+import getpass
+import subprocess
 
 #loading config.json into local array
 f=open("database/config.json")
@@ -32,11 +34,12 @@ if len(list)==0:
     list.append(path)
     print("Storage path set to: "+path)
     #print host ip adress
-    host_ip=socket.gethostbyname_ex(socket.gethostname())[-1][0]
+    output=subprocess.check_output(['hostname', '-I']).decode('utf-8')
+    host_ip=output.strip()
     list.append(host_ip)
     print("Server IP adress: "+host_ip)
     #user which will use the git server
-    username = os.getlogin()
+    username = getpass.getuser()
     list.append(username)
     print("Server user: "+username)
     #write everything to config.json

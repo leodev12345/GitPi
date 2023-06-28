@@ -9,8 +9,10 @@ list=[]
 config_list=[]
 #charecters not allowed in repo names
 ilegal_charecters=[" ","#","<",">","$","+","%","!","`","&","*","|","{","}","[","]","@",":","/","\"","\\","\'","\(","\)","=","?","€",";",".",",","§","¤","ß","Ł","ł","÷","×","¸","¨","~","ˇ","^","˘","°","˛","˙","´","˝"]
+current_path=os.path.abspath(os.getcwd())
 
 #load json values into the local array every time the program starts
+os.chdir(current_path)
 f=open("database/data.json")
 data=json.load(f)
 for i in data:
@@ -32,7 +34,8 @@ app = Flask(__name__)
 #function that writes all the repo data to data.json
 def write_json(arg):
     json_object=json.dumps(arg, indent=4)
-    with open("database/data.json", "w") as file:
+    os.chdir(current_path)
+    with open("./database/data.json", "w") as file:
         file.write(json_object)
 
 #creating repos
@@ -51,11 +54,11 @@ def create_repo():
         copy_text=config_user+"@"+config_ip+":"+config_path+text+".git"
 
         #create the repo on the server
-        #dir_name=text+".git"
-        #os.system("cd "+config_path)
-        #os.system("mkdir "+dir_name)
-        #os.system("cd "+dir_name)
-        #os.system("git init --bare")
+        dir_name=text+".git"
+        os.chdir(config_path)
+        os.mkdir(dir_name)
+        os.chdir(dir_name)
+        os.system("git init --bare")
         
         #add all the data to list and write it to data.json
         list.insert(0,tuple((text,"Path: "+copy_text,desc,copy_text)))
@@ -114,8 +117,8 @@ def more():
         #check data
         if old_name!=new_name and new_name!="" and old_name!="" and any(ele in new_name for ele in ilegal_charecters)==False:
             #rename repo on server
-            #os.system("cd "+config_path)
-            #os.system("mv "+old_name+".git"+" "+new_name+".git")
+            os.chdir(config_path)
+            os.rename(old_name+".git",new_name+".git")
 
             #get index of the tuple containing the old name
             result = [tup[0] for tup in list].index(old_name)            

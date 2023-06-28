@@ -1,38 +1,26 @@
 [
     [
-        "testing_123",
-        "Path: Korisnik@192.168.1.9:/home/pi/testing_123.git",
-        "No description",
-        "Korisnik@192.168.1.9:/home/pi/testing_123.git"
+        "nice",
+        "Path: leo@192.168.42.52:/home/leo/git/nice.git",
+        "it works",
+        "leo@192.168.42.52:/home/leo/git/nice.git"
     ],
     [
-        "new_new_repo",
-        "Path: Korisnik@192.168.1.9:/home/pi/new_new_repo.git",
-        "sjhfsdjhfds",
-        "Korisnik@192.168.1.9:/home/pi/new_new_repo.git"
+        "cool_repo",
+        "Path: leo@192.168.42.52:/home/leo/git/cool_repo.git",
+        "cool project",
+        "leo@192.168.42.52:/home/leo/git/cool_repo.git"
     ],
     [
-        "adsd",
-        "Path: Korisnik@192.168.1.9:/home/pi/adsd.git",
-        "wasd",
-        "Korisnik@192.168.1.9:/home/pi/adsd.git"
+        "new",
+        "Path: leo@192.168.42.52:/home/leo/git/new.git",
+        "new repo",
+        "leo@192.168.42.52:/home/leo/git/new.git"
     ],
     [
-        "change_desc",
-        "Path: Korisnik@192.168.1.9:/home/pi/change_desc.git",
-        "description changed",
-        "Korisnik@192.168.1.9:/home/pi/change_desc.git"
-    ],
-    [
-        "new_name",
-        "Path: Korisnik@192.168.1.9:/home/pi/new_name.git",
-        "rename me",
-        "Korisnik@192.168.1.9:/home/pi/new_name.git"
-    ],
-    [
-        "testing",
-        "Path: Korisnik@192.168.1.9:/home/pi/testing.git",
-        "YAYYYYY",
-        "Korisnik@192.168.1.9:/home/pi/testing.git"
+        "test2",
+        "Path: leo@192.168.42.52:/home/leo/git/test2.git",
+        "new desc",
+        "leo@192.168.42.52:/home/leo/git/test2.git"
     ]
 ]
