@@ -28,13 +28,16 @@ body{
   padding: 7px 7px 7px 7px;
 }
 .red-button:hover{
-  background-color: red;
+  background-color: #e30545;
+}
+.red-button:active{
+  background-color: #e30545;
 }
 .button:hover{
-  background-color: #7cb832;
+  background-color: #93c94f;
 }
 .button:active{
-  background-color: #8cc04b;
+  background-color: #93c94f;
 }
 .button-more{
   background-color: #8cc04b;
@@ -137,7 +140,7 @@ form{
   padding-right: 15px;
   border: none;
   border-radius: 15px;
-  margin-top: 100px;
+  margin-top: 45px;
   margin-bottom: 20px;
   margin-left: 30%;
   margin-right: 30%;
