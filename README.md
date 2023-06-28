@@ -71,6 +71,8 @@ After cloning the repository run the `setup.py` located in the root of the repos
 
 `python3 setup.py`
 
+The setup will ask you to create a password you will use to login into the web ui and will ask you to enter the folder path where your repositories will be stored.
+
 After configuring the app it will print out the servers IP adress that will be used to access the web ui.
 
 The username the program prints out is the linux user which will be used to run the server, its just setup as the current user so if you want it to be a different user you will have to login into that user and than run the setup.
