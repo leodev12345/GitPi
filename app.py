@@ -98,13 +98,13 @@ def login():
     #get the entered password and compare it to stored hashed password
     password=request.form['password']
     result = bcrypt.checkpw(password.encode('utf-8'), config_password.encode('utf-8'))
-    #log in if password is correct
+    #log in if password is correct and display an error if not
     if result==True:
         global logged_in
         logged_in=True
         return redirect(url_for('index_render')) 
     else:
-        return redirect(url_for('login_render'))
+        return render_template('login.html', error="Incorrect password")
 
 
 # more options page functionality
