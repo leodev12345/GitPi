@@ -50,29 +50,29 @@ Dependencies
 
 To install these run:
 
-`sudo apt update`
+`$ sudo apt update`
 
-`sudo apt install git`
+`$ sudo apt install git`
 
-`sudo apt install python3`
+`$ sudo apt install python3`
 
-`pip3 install flask`
+`$ pip3 install flask`
 
-`pip3 install bcrypt`
+`$ pip3 install bcrypt`
 
 If you dont have pip3 installed run:
 
-`sudo apt install python3-pip`
+`$ sudo apt install python3-pip`
 
 Also if you havent already you should setup a DHCP reservation so that your servers IP adress doesent change.
 
 After installing dependencies clone this repository with git, or you can just download it and unzip it.
 
-`git clone https://github:com/leodev12345/gitpi`
+`$ git clone https://github:com/leodev12345/gitpi`
 
 After cloning the repository run the `setup.py` located in the app folder:
 
-`python3 setup.py`
+`$ python3 setup.py`
 
 The setup will ask you to create a password you will use to login into the web ui and will ask you to enter the folder path where your repositories will be stored.
 
@@ -84,17 +84,17 @@ The username the program prints out is the linux user which will be used to run 
 
 You can run the app with gunicorn or a similar tool, if you dont have gunicorn installed run this command:
 
-`pip3 install gunicorn`
+`$ pip3 install gunicorn`
 
 After you install it it's really easy to run the app, just go into the app folder and run this command:
 
-`gunicorn --bind 0.0.0.0:5000 wsgi:app`
+`$ gunicorn --bind 0.0.0.0:5000 wsgi:app`
 
 Note that this will run the app on port 5000, so when you type the IP adress of the server into your browser you will need to add `:5000` at the end, for example `http://192.168.1.100:5000`.
 
 If you want to run it on port 80 so you dont have to add the port to the adress you can follow [this guide](https://gist.github.com/justinmklam/f13bb53be9bb15ec182b4877c9e9958d) and than use authbind which will give normal user access to port 80, you can than run the app just like this:
 
-`authbind --deep gunicorn --bind 0.0.0.0:80 wsgi:app`
+`$ authbind --deep gunicorn --bind 0.0.0.0:80 wsgi:app`
 
 And the app will now use the default http port 80 and you can access it without having to specify the port and you can easily access the interface by typing in the IP adress of the server into the browser.
 
@@ -102,11 +102,11 @@ And the app will now use the default http port 80 and you can access it without 
 
 You can run the app by just running the `app.py` with python but I would only recommend using the built in development server for testing and debugging since its less advanced and less efficient than a WSGI server like gunicorn and can only handle one request at once, so with that said you can run the app by running:
 
-`python3 app.py`
+`$ python3 app.py`
 
 Note that you will most likely run into issues with permissions, so you can either change the port from 80 to something like 5000 in the last line of code in `app.py` and than access the app by typing in the IP adress and specified port into your browser, or you can follow the guide I mentioned above and than run it with authbind:
 
-`authbind --deep python3 app.py`
+`$ authbind --deep python3 app.py`
 
 Now you can just go into your browser and type in the IP adress of the server without specifying a port.
 ## Usage
@@ -116,7 +116,7 @@ You can view all the repositories you created on the homepage and copy their pat
 
 If you want to rename, delete or change description of some repositories you can click the tree dots on the top navigation bar which will lead you to the more options page where you can also log out of the app.
 
-If you want to reset the configuration just edit the `config.json` in the `database` folder, than delete everything and type in `[]`, after that you can run the `setup.py` again to set up new config, currently there is no way to apply new configuration to already existing repositories so you will have to manually edit the `data.json` where repository info is stored.
+If you want to reset the configuration just edit the `config.json` in the `database` folder, than delete everything and replace it with`[]`, after that you can run the `setup.py` again to set up new config, currently there is no way to apply new configuration to already existing repositories so you will have to manually edit the `data.json` where repository info is stored.
 
 Currently there is no way to import already existing repositories on the server into the app so you will have to also enter them manually into `data.json`.
 
