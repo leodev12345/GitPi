@@ -1,0 +1,195 @@
+.topnav {
+  background-color: #282c34;
+  overflow: hidden;
+  padding:15px 15px;
+  padding-left: 55px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+body{
+  margin: 0;
+  padding: 0;
+  background-color: #32363e;
+  font-family: Arial, sans-serif;
+}
+.button{
+  background-color: #8cc04b;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 7px 7px 7px 7px;
+}
+.red-button{
+  background-color: #c7053d;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 7px 7px 7px 7px;
+}
+.red-button:hover{
+  background-color: #e30545;
+}
+.red-button:active{
+  background-color: #e30545;
+}
+.button:hover{
+  background-color: #93c94f;
+}
+.button:active{
+  background-color: #93c94f;
+}
+.button-more{
+  background-color: #8cc04b;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 7px 7px 7px 7px;
+  text-decoration: none; !important
+}
+.button-more:hover{
+  background-color: green;
+}
+.button-more:active{
+  background-color: #8cc04b;
+}
+.h2{
+  display: inline;
+  padding-right: 10px;
+  color: white;
+}
+.login-text{
+  color: white;
+  text-align: center;
+}
+.logo{
+  width: 200px;
+  height: 200px;
+  margin: none;
+  padding: none;
+}
+.logo-small{
+max-height: 70%;
+max-width: 70%;
+width: auto;
+height: auto;
+position: absolute;
+top: 5%;
+bottom: 20%;
+left: 0;
+right: 100%;
+padding-left: 0.5%;
+margin: auto;
+}
+h3{
+  color:#c7053d;
+  padding-left: 15px;
+}
+h1{
+  color: white;
+  text-align: center;
+}
+hr{
+  width: 100%;
+  border: 2px solid white;
+  border-radius: 5px;
+}
+form{
+  display: inline;
+}
+.label{
+  background-color: #32363e;
+  color: white;
+  border: solid;
+  border-color: white;
+  border-radius: 15px;
+  padding: 7px 7px 7px 7px;
+}
+.name{
+  color: #8cc04b;
+}
+.path{
+  color: white;
+  display: inline;
+}
+.path-2{
+  color: white;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+.repo{
+  background-color: #282c34;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: none;
+  border-radius: 15px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.repo-2{
+  background-color: #282c34;
+  padding-top: 5px;
+  padding-bottom: 25px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: none;
+  border-radius: 15px;
+  margin-top: 45px;
+  margin-bottom: 20px;
+  margin-left: 30%;
+  margin-right: 30%;
+  text-align: center;
+}
+.login-div{
+  background-color: #282c34;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  border: none;
+  border-radius: 15px;
+  margin-top: 100px;
+  margin-left: 30%;
+  margin-right: 30%;
+  text-align: center;
+}
+.repo button{
+  text-align: right;
+}
+.desc{
+  color: #c7053d;
+}
+.repo button{
+  margin-left: 97%;
+}
+.copy{
+  display: inline;
+}
+.delete{
+  background-color:#c7053d;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 7px 7px 7px 7px;
+}
+.delete:hover{
+  background-color: red;
+}
+.repo .commit{
+  text-align: right;
+  display: inline;
+}
+.more-link{
+  margin-left: 56%;
+  color: white;
+  text-decoration: none;
+  font-size: 25px;
+}
+.more-link-2{
+  color: white;
+  text-decoration: none;
+}

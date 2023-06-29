@@ -70,7 +70,7 @@ After installing dependencies clone this repository with git, or you can just do
 
 `git clone https://github:com/leodev12345/gitpi`
 
-After cloning the repository run the `setup.py` located in the root of the repository
+After cloning the repository run the `setup.py` located in the app folder:
 
 `python3 setup.py`
 
@@ -80,26 +80,45 @@ After configuring the app it will print out the servers IP adress that will be u
 
 The username the program prints out is the linux user which will be used to run the server, its just setup as the current user so if you want it to be a different user you will have to login into that user and than run the setup.
 
-NOTE: You can run the app by just running the python file but it's not the most efficient way and is only really good for debugging or testing the app, you can use tools like guincorn to run it the proper way, more info about that [here](https://flask.palletsprojects.com/en/2.3.x/deploying/).
+### Running with a WSGI server(recommended)
 
-So with that said you can run the app by running the `app.py` with python
+You can run the app with gunicorn or a similar tool, if you dont have gunicorn installed run this command:
+
+`pip3 install gunicorn`
+
+After you install it it's really easy to run the app, just go into the app folder and run this command:
+
+`gunicorn --bind 0.0.0.0:5000 wsgi:app`
+
+Note that this will run the app on port 5000, so when you type the IP adress of the server into your browser you will need to add `:5000` at the end, for example `http://192.168.1.100:5000`.
+
+If you want to run it on port 80 so you dont have to add the port to the adress you can follow [this guide](https://gist.github.com/justinmklam/f13bb53be9bb15ec182b4877c9e9958d) and than use authbind which will give normal user access to port 80, you can than run the app just like this:
+
+`authbind --deep gunicorn --bind 0.0.0.0:80 wsgi:app`
+
+And the app will now use the default http port 80 and you can access it without having to specify the port and you can easily access the interface by typing in the IP adress of the server into the browser.
+
+### Running with flask development server
+
+You can run the app by just running the `app.py` with python but I would only recommend using the built in development server for testing and debugging since its less advanced and less efficient than a WSGI server like gunicorn and can only handle one request at once, so with that said you can run the app by running:
 
 `python3 app.py`
 
-If you run into issues with permissions you could use authbind to allow normal user access to the port 80, There is a guide on how to do it [here](https://gist.github.com/justinmklam/f13bb53be9bb15ec182b4877c9e9958d).
+Note that you will most likely run into issues with permissions, so you can either change the port from 80 to something like 5000 in the last line of code in `app.py` and than access the app by typing in the IP adress and specified port into your browser, or you can follow the guide I mentioned above and than run it with authbind:
 
-After thats done just go to the specified IP adress in your browser and enter the password you just setup.
+`authbind --deep python3 app.py`
 
+Now you can just go into your browser and type in the IP adress of the server without specifying a port.
 ## Usage
 To create repositories you have to enter the name for the repo and click create, description is optional, the app will than init a bare git repository in the storage location you specified in the setup.
 
-You can view all the repositories you created on the homepage and copy their path with the copy button
+You can view all the repositories you created on the homepage and copy their path with the copy button.
 
 If you want to rename, delete or change description of some repositories you can click the tree dots on the top navigation bar which will lead you to the more options page where you can also log out of the app.
 
 If you want to reset the configuration just edit the `config.json` in the `database` folder, than delete everything and type in `[]`, after that you can run the `setup.py` again to set up new config, currently there is no way to apply new configuration to already existing repositories so you will have to manually edit the `data.json` where repository info is stored.
 
-Currently there is no way to import already existing repositorieson the server into the app so you will have to also enter them manually into `data.json`.
+Currently there is no way to import already existing repositories on the server into the app so you will have to also enter them manually into `data.json`.
 
 Also note when you delete a repository it's only deleted from the app and not from the device, I did this for security reasons just in case.
 ## Project Status
@@ -107,7 +126,11 @@ I made this project for fun and it's features are very limited, I might add more
 
 I would also not recommend using this if your server is open to the internet, I don't know how secure this app is but I'm guessing that it's not, but if you are just using it on your private home network than it's fine.
 
-If you need a more advanced web ui for your git server than use something like gitea or something similar, or if you want to add more feaures you can fork this repository and do whatever you want with it.
+Also im not certain on how many devices can access the server at once since I intended it to only be used by me on my home network.
+
+Overall this is a very simple app i just made for fun so if you are looking for more features or for more security than you should just use something like gitea or something similar.
+
+If you want to add more feaures or to improve this project or to just use the code for your own project you can fork/clone this repository and do whatever you want with it.
 
 ## Credits
 I modified the Git logo that is created by [Jason Long](https://twitter.com/jasonlong) and licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/) to create the icon for the app, it's downloaded from [https://git-scm.com/downloads/logos](https://git-scm.com/downloads/logos) 
