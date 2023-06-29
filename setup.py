@@ -45,6 +45,9 @@ if len(list)==0:
     username = getpass.getuser()
     list.append(username)
     print("Server user: "+username)
+    #generate secret key for flask sessions
+    secret_key=os.urandom(24).hex()
+    list.append(secret_key)
     #write everything to config.json
     write_json(list)
 #if everything is already setup

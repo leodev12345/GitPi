@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import json
 import os
 import bcrypt
 
-logged_in=False
 #Storing values locally
 list=[]
 config_list=[]
@@ -32,12 +31,12 @@ config_user=config_data[3]
 
 #app init
 app = Flask(__name__)
-
+app.secret_key=config_data[4]
 #function that writes all the repo data to data.json
 def write_json(arg):
     json_object=json.dumps(arg, indent=4)
     os.chdir(current_path)
-    with open("./database/data.json", "w") as file:
+    with open("database/data.json", "w") as file:
         file.write(json_object)
 
 #creating repos
@@ -73,18 +72,18 @@ def create_repo():
 @app.route("/")
 def index_render():
     #redirect to login page if the user isnt logged in
-    if logged_in==True:
+    if "logged-in" in session:
         return render_template('index.html', my_list=list)
-    elif logged_in==False:
+    else:
         return redirect(url_for('login_render'))
 
 #render more options
 @app.route("/more")
 def more_render():
     #redirect to login page if user isnt logged in
-    if logged_in==True:
+    if "logged-in" in session:
         return render_template('more.html')
-    elif logged_in==False:
+    else:
         return redirect(url_for('login_render'))
 
 #render login page
@@ -100,8 +99,7 @@ def login():
     result = bcrypt.checkpw(password.encode('utf-8'), config_password.encode('utf-8'))
     #log in if password is correct and display an error if not
     if result==True:
-        global logged_in
-        logged_in=True
+        session["logged-in"]=True
         return redirect(url_for('index_render')) 
     else:
         return render_template('login.html', error="Incorrect password")
@@ -171,8 +169,7 @@ def more():
     #check if "Log out" button is clicked
     elif 'logout' in request.form:    
         #log out the user and redirect back to login.html
-        global logged_in
-        logged_in=False
+        session.pop("logged-in", None)
         return redirect(url_for('login_render'))
     
     #refresh the website after form is submitted
