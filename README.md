@@ -43,6 +43,7 @@ Homepage
 More options page
 ## Setup
 Dependencies
+- git
 - Python 3 (I used 3.8 and 3.9)
 - Flask 
 - Bcrypt
@@ -50,6 +51,8 @@ Dependencies
 To install these run:
 
 `sudo apt update`
+
+`sudo apt install git`
 
 `sudo apt install python3`
 
