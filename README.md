@@ -1,5 +1,5 @@
 # GitPi
-> A simple web ui app that gives you basic controls over your git server.
+> A simple web UI that allows basic controls over your git server.
 
 ## Table of Contents
 * [General Info](#general-information)
