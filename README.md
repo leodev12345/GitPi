@@ -1,5 +1,5 @@
 # GitPi
-> A simple web UI app that allows you to have basic controls over your git server using your web browser.
+> A simple web UI app that allows you to have basic controls over your Git server using your web browser.
 
 ## Table of Contents
 * [General Info](#general-information)
@@ -13,7 +13,7 @@
 
 
 ## General Information
-A simple git server web app written in python using Flask, it was intended to be used on a raspberry pi but it should work on pretty much any linux machine.
+A simple Git server web app written in python using Flask, it was intended to be used on a raspberry pi but it should work on pretty much any linux machine.
 
 Allows you to have some basic controls over your repositories inside your browser so you don't have to SSH into the server every time.
 
