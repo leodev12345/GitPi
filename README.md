@@ -78,7 +78,7 @@ The setup will ask you to create a password you will use to login into the web u
 
 After configuring the app it will print out the servers IP adress that will be used to access the web ui.
 
-The username the program prints out is the linux user which will be used to run the server, its just setup as the current user so if you want it to be a different user you will have to login into that user and than run the setup.
+The username you input into the setup program is the linux user which will be used to interact with your repositories on the server, you can set it to your current linux user or to another one.
 
 ### Running with a WSGI server(recommended)
 

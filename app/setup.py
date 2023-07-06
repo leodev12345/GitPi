@@ -42,7 +42,9 @@ if len(list)==0:
     list.append(host_ip)
     print("Server IP adress: "+host_ip)
     #user which will use the git server
-    username = getpass.getuser()
+    username=input("Set server linux user(leave blank for current user): ")
+    if username=="":
+        username = getpass.getuser()
     list.append(username)
     print("Server user: "+username)
     #generate secret key for flask sessions
@@ -50,6 +52,7 @@ if len(list)==0:
     list.append(secret_key)
     #write everything to config.json
     write_json(list)
+    print("Setup complete!")
 #if everything is already setup
 else:
     print("Everything is already set up")
