@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session  
 import json
 import os
 import bcrypt
+from functools import wraps
+import subprocess
 
 #Storing values locally
 list=[]
@@ -32,6 +34,16 @@ config_user=config_data[3]
 #app init
 app = Flask(__name__)
 app.secret_key=config_data[4]
+
+#decorator to redirect to login page if user isnt logged in
+def login_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if "logged-in" not in session:
+            return redirect(url_for("login_render"))
+        return func(*args, **kwargs)
+    return wrapper
+
 #function that writes all the repo data to data.json
 def write_json(arg):
     json_object=json.dumps(arg, indent=4)
@@ -70,21 +82,15 @@ def create_repo():
 
 #render the homepage
 @app.route("/")
+@login_required
 def index_render():
-    #redirect to login page if the user isnt logged in
-    if "logged-in" in session:
-        return render_template('index.html', my_list=list)
-    else:
-        return redirect(url_for('login_render'))
+    return render_template('index.html', my_list=list)
 
 #render more options
 @app.route("/more")
+@login_required
 def more_render():
-    #redirect to login page if user isnt logged in
-    if "logged-in" in session:
-        return render_template('more.html')
-    else:
-        return redirect(url_for('login_render'))
+    return render_template('more.html')
 
 #render login page
 @app.route("/login")
@@ -175,7 +181,19 @@ def more():
     #refresh the website after form is submitted
     return render_template('more.html')
 
+@app.route("/<id>", methods=['GET', 'POST'])
+@login_required
+def repo(id):
+    try:
+        path=config_path+id+".git"
+        os.chdir(path)
+        files = subprocess.check_output(['git', 'ls-tree', '--name-only', '-r', 'HEAD']).decode('utf-8')
+        commits = subprocess.check_output(['git', 'log', '--pretty=%B']).decode('utf-8').strip()
+    except subprocess.CalledProcessError:
+        files="No files are created yet"
+        commits="No commits yet"
+    return render_template('repo.html', files=files, commits=commits, name=id)
 
 #run the program(debug only!)
 if __name__ == '__main__':
-    app.run(debug=True, port=80, host='0.0.0.0')
+    app.run(debug=True, port=5000, host='0.0.0.0')

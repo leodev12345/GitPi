@@ -24,8 +24,8 @@
     <br>
     <div class="container">
       {% for n, m, a, b in my_list %}
-        <div class="repo">
-        <h3 class="name">{{n}}</h3>
+	  <div class="repo" id="{{n}}">
+		<a href="{{url_for('repo', id=n)}}"><h3 class="name">{{n}}</h3></a>
         <h3 class="desc">{{a}}</h3>
         <hr>
         <h3 class="path">{{m}}</h3>

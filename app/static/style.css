@@ -13,6 +13,9 @@ body{
   background-color: #32363e;
   font-family: Arial, sans-serif;
 }
+a{
+  text-decoration:none;
+}
 .button{
   background-color: #8cc04b;
   color: white;
@@ -131,6 +134,7 @@ form{
   margin-bottom: 20px;
   margin-left: 20px;
   margin-right: 20px;
+  scroll-margin-top: 250px;
 }
 .repo-2{
   background-color: #282c34;
@@ -184,7 +188,7 @@ form{
   display: inline;
 }
 .more-link{
-  margin-left: 56%;
+  margin-left: 54%;
   color: white;
   text-decoration: none;
   font-size: 25px;

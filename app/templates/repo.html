@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>{{name}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  </head>
+  <body>
+    <div class="login-div">
+		<h3>File structure</h3>
+		<pre>{{files}}</pre>
+		<h3>Commit history</h3>
+		<pre>{{commits}}</pre>
+		<a href="/#{{name}}">Back</a>
+	</div>
+  </body>
+</html>
+
