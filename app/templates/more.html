@@ -10,21 +10,21 @@
     <div class="repo-2">
       <h1>More options</h1>
       <h3 class="path-2">Rename repository</h3>
-	  <form method="POST">
+	  <form method="POST" action="/more/rename">
       <input name="old_name" placeholder="Old name" class="label" autocomplete="off">
       <input name="new_name" placeholder="New name" class="label" autocomplete="off">
       <input type="submit" name="rename" value="Rename" class="button">
 	  </form>
 	  <br>
       <h3 class="path-2">Change repository description</h3>
-	  <form method="POST">
+	  <form method="POST" action="/more/change_desc">
       <input name="repo_name" placeholder="Repository name" class="label" autocomplete="off">
       <input name="new_desc" placeholder="New description" class="label" autocomplete="off">
       <input type="submit" name="confirm" value="Confirm" class="button">
 	  </form>
 	  <br>
       <h3 class="path-2">Delete repository</h3>
-	  <form method="POST">
+	  <form method="POST" action="/more/delete">
       <input name="name_1" placeholder="Repository name" class="label" autocomplete="off">
       <input name="name_2" placeholder="Confirm name" class="label" autocomplete="off">
       <input type="submit" name="remove" value="Remove" class="red-button">
@@ -32,7 +32,7 @@
 	  <br>
       <br>
       <a href="/" class="more-link-2">&#129136; Back&#10240;&#10240;</a>
-	  <form method="POST">
+	  <form method="POST" action="/logout">
       <input type="submit" name="logout" value="&#9211;  Log out" class="red-button">
 	  </form>
 	  <br>

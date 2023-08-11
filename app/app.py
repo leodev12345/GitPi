@@ -100,12 +100,13 @@ def login():
 
 
 # more options page functionality
+@app.route("/more/rename", methods=['POST'])
 def rename_repo():
     #get all the data
     old_name = request.form['old_name']
     new_name = request.form['new_name']
     #check data
-    if old_name!=new_name and new_name!="" and old_name!="" and any(ele in new_name for ele in ilegal_charecters)==False:
+    if old_name!=new_name and new_name!="" and old_name!="" and any(ele in new_name for ele in ilegal_charecters)==False and new_name not in repo_dict:
         #rename repo on server
         os.chdir(config_dict["storage_path"])
         os.rename(f"{old_name}.git",f"{new_name}.git")
@@ -116,6 +117,7 @@ def rename_repo():
         write_json(repo_dict)
     return redirect(url_for("more"))
 
+@app.route("/more/delete", methods=['POST'])
 def delete_repo():
     #get all the data
     delete_name = request.form['name_1']
@@ -128,6 +130,7 @@ def delete_repo():
         write_json(repo_dict)
     return redirect(url_for("more"))
 
+@app.route("/more/change_desc", methods=['POST'])
 def change_repo_desc():
     #get all the data
     repo_name = request.form['repo_name']
@@ -140,24 +143,25 @@ def change_repo_desc():
         write_json(repo_dict)
     return redirect(url_for("more"))
 
+@app.route("/logout", methods=['POST'])
 def logout():
     #log out the user and redirect back to login.html
     session.pop("logged-in", None)
     return redirect(url_for('login_render'))
 
 more_dict={
-    "rename": rename_repo,
-    "remove": delete_repo,
-    "confirm": change_repo_desc,
-    "logout": logout
+    "rename": "rename_repo",
+    "remove": "delete_repo",
+    "confirm": "change_repo_desc",
+    "logout": "logout"
 }
 
 @app.route("/more", methods=['POST'])
 def more():
     for key in request.form:
         if key in more_dict:
-            more_dict[key]()
-    return redirect(url_for("more"))
+            return redirect(url_for(more_dict[key]))
+    #return redirect(url_for("more"))
 
 @app.route("/<id>", methods=['GET', 'POST'])
 @login_required

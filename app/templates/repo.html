@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-	<title>{{name}}</title>
+	<title>{{name}} - GitPi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -16,7 +16,7 @@
 		<div class="files">
 			<pre>{{path}}<a href="#" onclick="copy('{{path}}')" class="more-link-2"> &#x2398;</a></pre>
 		</div>
-		<h3 class="repo-h3">File structure</h3>
+		<h3 class="repo-h3">Files</h3>
 		<div class="files">
 			<pre>{{files}}</pre>
 		</div>
