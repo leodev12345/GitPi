@@ -35,7 +35,7 @@ config_user=config_data[3]
 app = Flask(__name__)
 app.secret_key=config_data[4]
 
-#decorator to redirect to login page if user isnt logged in
+#decorator that redirects to login page
 def login_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -192,8 +192,10 @@ def repo(id):
     except subprocess.CalledProcessError:
         files="No files are created yet"
         commits="No commits yet"
-    return render_template('repo.html', files=files, commits=commits, name=id)
-
+    result = [tup[0] for tup in list].index(id)
+    desc = list[result][2]
+    path = list[result][3]
+    return render_template('repo.html', files=files, commits=commits, name=id, desc=desc, path=path)
 #run the program(debug only!)
 if __name__ == '__main__':
     app.run(debug=True, port=5000, host='0.0.0.0')

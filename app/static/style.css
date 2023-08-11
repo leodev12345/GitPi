@@ -72,17 +72,17 @@ a{
   padding: none;
 }
 .logo-small{
-max-height: 70%;
-max-width: 70%;
-width: auto;
-height: auto;
-position: absolute;
-top: 5%;
-bottom: 20%;
-left: 0;
-right: 100%;
-padding-left: 0.5%;
-margin: auto;
+  max-height: 70%;
+  max-width: 70%;
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: 5%;
+  bottom: 20%;
+  left: 0;
+  right: 100%;
+  padding-left: 0.5%;
+  margin: auto;
 }
 h3{
   color:#c7053d;
@@ -93,7 +93,7 @@ h1{
   text-align: center;
 }
 hr{
-  width: 100%;
+  width: 97%;
   border: 2px solid white;
   border-radius: 5px;
 }
@@ -125,7 +125,7 @@ form{
 .repo{
   background-color: #282c34;
   padding-top: 15px;
-  padding-bottom: 15px;
+  padding-bottom: 35px;
   padding-left: 15px;
   padding-right: 15px;
   border: none;
@@ -160,6 +160,21 @@ form{
   margin-left: 30%;
   margin-right: 30%;
   text-align: center;
+}
+.repo-div{
+  background-color: #282c34;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  border: none;
+  border-radius: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
+  text-align: left;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-left: 23%;
+  margin-right: 23%;
+  width: 50%;
 }
 .repo button{
   text-align: right;
@@ -196,4 +211,22 @@ form{
 .more-link-2{
   color: white;
   text-decoration: none;
+}
+pre{
+  color: white;
+  font-size: 20px;
+  font-family: Arial, sans-serif;
+}
+.repo-h3{
+  color: white;
+  text-align: left;
+}
+.files{
+  text-align: left;
+  background-color: #32363e;
+  padding-left: 20px;
+  padding-right: 150px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 15px;
 }

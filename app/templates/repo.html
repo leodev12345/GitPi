@@ -5,14 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
   </head>
   <body>
-    <div class="login-div">
-		<h3>File structure</h3>
-		<pre>{{files}}</pre>
-		<h3>Commit history</h3>
-		<pre>{{commits}}</pre>
-		<a href="/#{{name}}">Back</a>
+    <div class="repo-div">
+		<h3 class="repo-h3" style="display: inline"><a href="/#{{name}}" class="more-link-2">&#129136; {{name}}</a></h3>
+		<h3 class="repo-h3">{{desc}}</h3>
+		<hr>
+		<h3 class="repo-h3">Path</h3>
+		<div class="files">
+			<pre>{{path}}<a href="#" onclick="copy('{{path}}')" class="more-link-2"> &#x2398;</a></pre>
+		</div>
+		<h3 class="repo-h3">File structure</h3>
+		<div class="files">
+			<pre>{{files}}</pre>
+		</div>
+		<h3 class="repo-h3">Commit history</h3>
+		<div class="files">
+			<pre>{{commits}}</pre>
+		</div>
 	</div>
   </body>
 </html>

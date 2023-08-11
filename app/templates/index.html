@@ -28,9 +28,8 @@
 		<a href="{{url_for('repo', id=n)}}"><h3 class="name">{{n}}</h3></a>
         <h3 class="desc">{{a}}</h3>
         <hr>
-        <h3 class="path">{{m}}</h3>
-        <button class="button" onclick='copy("{{b}}")' class="copy">Copy</button>
-        </div>
+		<h3 class="path">{{m}}<a href="#" onclick="copy('{{b}}')" class="more-link-2"> &#x2398;</a></h3>
+      </div>
       {% endfor %}
     </div>
   </body>
