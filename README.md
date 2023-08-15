@@ -38,8 +38,11 @@ Login page
 Homepage
 ![Homepage](./screenshots/homepage.png)
 
+Repository info page
+![Repo_info](./screenshots/repo_page.png)
+
 More options page
-![more](./screenshots/more_options.png)
+![More](./screenshots/more_options.png)
 
 ## Setup
 Dependencies
