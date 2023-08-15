@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>GitPi</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
-    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-  </head>
-  <body>
-    <div class="topnav">
-    <img src="{{url_for('static', filename='gitpi_logo.png')}}" class="logo-small">
-    <h2 class="h2">GitPi</h2>
-    <form method="POST">
-    <input name="text" placeholder="Name" class="label" autocomplete="off">
-    <input name="desc" placeholder="Description" class="label" autocomplete="off">
-    <input type="submit" value="Create" class="button">
-    <a href="{{url_for('more')}}" class="more-link">&#65049;</a>
-    </div>
-    </form>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="container">
-      {% for key, value in repos.items() %}
-	  <div class="repo" id="{{key}}">
-		<a href="{{url_for('repo', id=key)}}"><h3 class="name">{{key}}</h3></a>
-        <h3 class="desc">{{value[1]}}</h3>
-        <hr>
-		<h3 class="path">Path: {{value[0]}}<a href="#" onclick="copy('{{value[0]}}')" class="more-link-2"> &#x2398;</a></h3>
-      </div>
-      {% endfor %}
-    </div>
-  </body>
+	<head>
+		<title>GitPi</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
+		<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+	</head>
+	<body>
+		<div class="topnav">
+			<img src="{{url_for('static', filename='gitpi_logo.png')}}" class="logo-small">
+			<h2 class="h2">GitPi</h2>
+			<form method="POST">
+				<input name="text" placeholder="Name" class="label" autocomplete="off">
+				<input name="desc" placeholder="Description" class="label" autocomplete="off">
+ 				<input type="submit" value="Create" class="button">
+				<a href="{{url_for('more')}}" class="more-link">&#65049;</a>
+			</form>
+		</div>
+		<br>
+		<br>
+		<br>
+		<br>
+		<div class="container">
+			{% for key, value in repos.items() %}
+				<div class="repo" id="{{key}}">
+					<a href="{{url_for('repo', id=key)}}"><h3 class="name">{{key}}</h3></a>
+					<h3 class="desc">{{value[1]}}</h3>
+					<hr>
+					<h3 class="path">Path: {{value[0]}}<a href="#" onclick="copy('{{value[0]}}')" class="more-link-2"> &#x2398;</a></h3>
+				</div>
+			{% endfor %}
+		</div>
+	</body>
 </html>

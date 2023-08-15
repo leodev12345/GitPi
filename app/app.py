@@ -6,17 +6,18 @@ from functools import wraps
 import subprocess
 
 #charecters not allowed in repo names
-ilegal_charecters=[" ","#","<",">","$","+","%","!","`","&","*","|","{","}","[","]","@",":","/","\"","\\","\'","\(","\)","=","?","€",";",".",",","§","¤","ß","Ł","ł","÷","×","¸","¨","~","ˇ","^","˘","°","˛","˙","´","˝"]
-#get current working path 
+ilegal_charecters=[" ","#","<",">","$","+","%","!","`","&","*","|","{","}","[","]","@",":","/","\"","\\","\'","(",")","=","?","€",";",".",",","§","¤","ß","Ł","ł","÷","×","¸","¨","~","ˇ","^","˘","°","˛","˙","´","˝"]
+
+#get current working path and chdir into it 
 current_path=os.path.abspath(os.getcwd())
 os.chdir(current_path)
-#load json values into the local array every time the program starts
-#chdir to project working folder to avoid loading database from wrong path when the working dir changes
-#function that returns contents of a specified json file
+
+#return specified json file contents
 def load_json(file):
     with open(file, "r") as f:
         return json.load(f)
-#load json into local dicts
+
+#load json values into local dicts
 repo_dict=load_json("database/data.json")
 config_dict=load_json("database/config.json")
 
@@ -24,7 +25,7 @@ config_dict=load_json("database/config.json")
 app = Flask(__name__)
 app.secret_key=config_dict["app_secret_key"]
 
-#decorator that redirects to login page
+#decorator that redirects to login page if user is not logged in
 def login_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -40,10 +41,18 @@ def write_json(value):
     with open("database/data.json", "w") as file:
         file.write(json_object)
 
-#creating repos
+############################## Homepage ##############################
+
+#render index.html and pass repo dictionary in reversed order to it (so new repositories appear on top)
+@app.route("/")
+@login_required
+def index_render():
+    return render_template('index.html', repos=dict(reversed(list(repo_dict.items()))))
+
+#creating repositories
 @app.route('/', methods=['POST'])
 def create_repo():
-    #collecting info
+    #collecting info on form sumit
     name = request.form['text']
     desc = request.form['desc']
     #checking info
@@ -51,36 +60,112 @@ def create_repo():
         #set default description
         if desc=="":
             desc="No description"
-        #full path to the repo
-        path=f"{config_dict['server_user']}@{config_dict['server_IP']}:{config_dict['storage_path']}{name}.git"
         
-        #create the repo on the server
+        #create the bare git repo on the server
         dir_name=f"{name}.git"
         os.chdir(config_dict["storage_path"])
         os.mkdir(dir_name)
         os.chdir(dir_name)
         os.system("git init --bare")
         
-        #add all the data to list and write it to data.json
+        #path to the repo
+        path=f"{config_dict['server_user']}@{config_dict['server_IP']}:{config_dict['storage_path']}{name}.git"
+        #add all the data to local dict and write it to data.json
         repo_dict[name]=[path, desc]
         write_json(repo_dict)
 
-    #refresh the website after form is submitted
+    #refresh the website after form is submitted and processed
     return redirect(url_for('create_repo'))
 
-#render the homepage
-@app.route("/")
-@login_required
-def index_render():
-    return render_template('index.html', repos=dict(reversed(list(repo_dict.items()))))
+############################## More options page ##############################
 
-#render more options
+#rename repository
+@app.route("/more/rename", methods=['POST'])
+def rename_repo():
+    #get all the data from the form
+    old_name = request.form['old_name']
+    new_name = request.form['new_name']
+    #check data
+    if old_name!=new_name and new_name!="" and old_name!="" and any(ele in new_name for ele in ilegal_charecters)==False and new_name not in repo_dict:
+        #rename git repo on the server
+        os.chdir(config_dict["storage_path"])
+        os.rename(f"{old_name}.git",f"{new_name}.git")
+        
+        #rename repo in local dict
+        #create new dict key with new name and assign description from old key and and assign new path
+        path = f"{config_dict['server_user']}@{config_dict['server_IP']}:{config_dict['storage_path']}{new_name}.git"
+        desc = repo_dict[old_name][1]
+        repo_dict[new_name]=[path, desc]
+        #delete old repo key from the dict
+        del repo_dict[old_name]
+        #write data to data.json
+        write_json(repo_dict)
+    #redirect back to main more options page
+    return redirect(url_for("more"))
+
+#delete repository from app
+@app.route("/more/delete", methods=['POST'])
+def delete_repo():
+    #get all the data from form
+    delete_name = request.form['name_1']
+    delete_name_confirm = request.form['name_2']
+    #check data
+    if delete_name==delete_name_confirm and delete_name!="":
+        #delete repo key from local dict
+        del repo_dict[delete_name]
+        #write data to data.json
+        write_json(repo_dict)
+    #redirect back to more options main page
+    return redirect(url_for("more"))
+
+#change repo description
+@app.route("/more/change_desc", methods=['POST'])
+def change_repo_desc():
+    #get all the data from the form
+    repo_name = request.form['repo_name']
+    new_desc = request.form['new_desc']
+    #check data
+    if repo_name!="" and new_desc!="":
+        #change data in local repo dict
+        repo_dict[repo_name][1]=new_desc
+        #write data to data.json
+        write_json(repo_dict)
+    #redirect back to more options main page
+    return redirect(url_for("more"))
+
+#log out
+@app.route("/logout", methods=['POST'])
+def logout():
+    #delete logged-in session to log out the user
+    session.pop("logged-in", None)
+    #redirect back to log in page
+    return redirect(url_for('login_render'))
+
+#a dictionary that assigns every from submit attribute value to its endpoint name
+more_dict={
+    "rename": "rename_repo",
+    "remove": "delete_repo",
+    "confirm": "change_repo_desc",
+    "logout": "logout"
+}
+
+#render more.html
 @app.route("/more")
 @login_required
 def more_render():
     return render_template('more.html')
 
-#render login page
+#more options main page functionality
+@app.route("/more", methods=['POST'])
+def more():
+    #find which name attribute request.form contains and redirect to proper page 
+    for key in request.form:
+        if key in more_dict:
+            return redirect(url_for(more_dict[key]))
+
+############################## Log in page ##############################
+
+#render login.html page
 @app.route("/login")
 def login_render():
     return render_template('login.html')
@@ -98,83 +183,30 @@ def login():
     else:
         return render_template('login.html', error="Incorrect password")
 
+############################## Repo info page ##############################
 
-# more options page functionality
-@app.route("/more/rename", methods=['POST'])
-def rename_repo():
-    #get all the data
-    old_name = request.form['old_name']
-    new_name = request.form['new_name']
-    #check data
-    if old_name!=new_name and new_name!="" and old_name!="" and any(ele in new_name for ele in ilegal_charecters)==False and new_name not in repo_dict:
-        #rename repo on server
-        os.chdir(config_dict["storage_path"])
-        os.rename(f"{old_name}.git",f"{new_name}.git")
-        #rename repo in local dict
-        repo_dict[new_name]=[f"{config_dict['server_user']}@{config_dict['server_IP']}:{config_dict['storage_path']}{new_name}.git", repo_dict[old_name][1]]
-        del repo_dict[old_name]
-        #write data to data.json
-        write_json(repo_dict)
-    return redirect(url_for("more"))
-
-@app.route("/more/delete", methods=['POST'])
-def delete_repo():
-    #get all the data
-    delete_name = request.form['name_1']
-    delete_name_confirm = request.form['name_2']
-    #check data
-    if delete_name==delete_name_confirm and delete_name!="":
-        #delete from local dict
-        del repo_dict[delete_name]
-        #write data to data.json
-        write_json(repo_dict)
-    return redirect(url_for("more"))
-
-@app.route("/more/change_desc", methods=['POST'])
-def change_repo_desc():
-    #get all the data
-    repo_name = request.form['repo_name']
-    new_desc = request.form['new_desc']
-    #check data
-    if repo_name!="" and new_desc!="":
-        #change data in local dict
-        repo_dict[repo_name][1]=new_desc
-        #write data to data.json
-        write_json(repo_dict)
-    return redirect(url_for("more"))
-
-@app.route("/logout", methods=['POST'])
-def logout():
-    #log out the user and redirect back to login.html
-    session.pop("logged-in", None)
-    return redirect(url_for('login_render'))
-
-more_dict={
-    "rename": "rename_repo",
-    "remove": "delete_repo",
-    "confirm": "change_repo_desc",
-    "logout": "logout"
-}
-
-@app.route("/more", methods=['POST'])
-def more():
-    for key in request.form:
-        if key in more_dict:
-            return redirect(url_for(more_dict[key]))
-    #return redirect(url_for("more"))
-
+#endpoint with variable route containing repository name
 @app.route("/<id>", methods=['GET', 'POST'])
 @login_required
 def repo(id):
     try:
+        #get full repository path and chdir into it
         path=f"{config_dict['storage_path']}{id}.git"
         os.chdir(path)
+        #get list of repository files and repository commit history
         files = subprocess.check_output(['git', 'ls-tree', '--name-only', '-r', 'HEAD']).decode('utf-8')
         commits = subprocess.check_output(['git', 'log', '--pretty=%B']).decode('utf-8').strip()
+    #if above commands return an error(if the repository contains no files or commits)
     except subprocess.CalledProcessError:
+        #set default file and commit values
         files="No files are created yet"
         commits="No commits yet"
+    #render page and pass all variables to it
     return render_template('repo.html', files=files, commits=commits, name=id, desc=repo_dict[id][1], path=repo_dict[id][0])
-#run the program(debug only!)
+
+############################################################################
+
+#run the app(debug only!)
 if __name__ == '__main__':
     app.run(debug=True, port=5000, host='0.0.0.0')
+
