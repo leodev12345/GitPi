@@ -105,7 +105,7 @@ Now install all pip dependencies by running this command:
 
 `$ pip install -r requirements.txt`
 
-## 4. Configuring the app
+### 4. Configuring the app
 When you installed all the dependencies change directory into the `app` directory:
 
 `$ cd app`
@@ -116,7 +116,7 @@ Now run `config.py`:
 
 Select option 1 for first time setup and than set everything up.
 
-## 5. Run the app
+### 5. Run the app
 When you are inside the app directory run the app by using this command:
 
 `$ gunicorn`
