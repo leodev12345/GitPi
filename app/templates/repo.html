@@ -9,13 +9,23 @@
 	</head>
 	<body>
 		<div class="repo-div">
-			<h3 class="repo-h3" style="display: inline"><a href="/#{{name}}" class="more-link-2">&#129136; {{name}}</a></h3>
-			<h3 class="repo-h3">{{desc}}</h3>
+			<h3 class="name" style="display: inline"><a href="/#{{name}}" class="name">&#129136; {{name}}</a></h3>
+			<h3 class="desc">{{desc}}</h3>
 			<hr>
-			<h3 class="repo-h3">Path</h3>
-			<div class="files">
-				<pre>{{path}}<a href="#" onclick="copy('{{path}}')" class="more-link-2"> &#x2398;</a></pre>
-			</div>
+			<h3 class="path">Path: {{path}}<a href="#" onclick="copy('{{path}}')" class="more-link-2"> &#x2398;</a></h3>
+			<br>
+			<form method="POST">
+				<select name="branch_select">
+					{% for branch in branches %}
+						{% if branch == current_branch %}
+							<option value={{branch}} selected={{branch}}>&#x2387; {{branch}}</option>
+						{% else %}
+							<option value={{branch}}>&#x2387; {{branch}}</option>
+						{% endif %}
+					{% endfor %}
+				</select>
+				<input type="submit" value="Change branch" class="branch-button">
+			</form>
 			<h3 class="repo-h3">Files</h3>
 			<div class="files">
 				<pre>{{files}}</pre>

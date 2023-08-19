@@ -41,6 +41,37 @@ def write_json(value):
     with open("database/data.json", "w") as file:
         file.write(json_object)
 
+def organize_files(file_list, name, branch):
+    lines = file_list.strip().split('\n')
+    file_structure = {}
+
+    for line in lines:
+        parts = line.split('/')
+        current = file_structure
+
+        for part in parts:
+            if part not in current:
+                current[part] = {}
+            current = current[part]
+
+    def create_structure(structure, indent=""):
+        result = ""
+        keys = list(structure.keys())
+        for index, name in enumerate(keys):
+            content = structure[name]
+            last_item = index == len(keys) - 1
+
+            if content:
+                result += f"{indent}{'└─ ' if last_item else '├─ '}{name}/\n"
+                result += create_structure(content, indent + ('    ' if last_item else '│  '))
+            else:
+                result += f"{indent}{'└─ ' if last_item else '├─ '}{name}\n"
+        return result
+
+    organized_files = create_structure(file_structure)
+
+    return f"{name}|{branch}\n"+organized_files
+
 ############################## Homepage ##############################
 
 #render index.html and pass repo dictionary in reversed order to it (so new repositories appear on top)
@@ -185,24 +216,30 @@ def login():
 
 ############################## Repo info page ##############################
 
-#endpoint with variable route containing repository name
+#endpoint with variable route containing repository name and the default branch
 @app.route("/<id>", methods=['GET', 'POST'])
 @login_required
-def repo(id):
+def repo(id, selected_branch="master"):
+    if request.method=="POST":
+        selected_branch=request.form.get("branch_select")
     try:
         #get full repository path and chdir into it
         path=f"{config_dict['storage_path']}{id}.git"
         os.chdir(path)
         #get list of repository files and repository commit history
-        files = subprocess.check_output(['git', 'ls-tree', '--name-only', '-r', 'HEAD']).decode('utf-8')
-        commits = subprocess.check_output(['git', 'log', '--pretty=%B']).decode('utf-8').strip()
+        branches = subprocess.check_output(['git', 'branch', '-a']).decode("utf-8")
+        branches = branches.replace("* ", "").replace("  ", "").strip().split("\n")
+        files = subprocess.check_output(['git', 'ls-tree', '--name-only', '-r', selected_branch]).decode('utf-8')
+        files=organize_files(files, id, selected_branch)
+        commits = subprocess.check_output(['git', 'log', '--pretty=%B', '--first-parent', selected_branch]).decode('utf-8').strip()
     #if above commands return an error(if the repository contains no files or commits)
     except subprocess.CalledProcessError:
-        #set default file and commit values
+        #set default file, branch and commit values
         files="No files are created yet"
         commits="No commits yet"
+        branches=["No branches created"]
     #render page and pass all variables to it
-    return render_template('repo.html', files=files, commits=commits, name=id, desc=repo_dict[id][1], path=repo_dict[id][0])
+    return render_template('repo.html', files=files, commits=commits, name=id, desc=repo_dict[id][1], path=repo_dict[id][0], branches=branches, current_branch=selected_branch)
 
 ############################################################################
 

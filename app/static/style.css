@@ -212,10 +212,14 @@ form{
 	color: white;
 	text-decoration: none;
 }
+@font-face {
+    font-family: "DejaVuSansMono";
+    src: url("/static/DejaVuSansMNerdFontMono-Regular.ttf") format("truetype");
+}
 pre{
 	color: white;
 	font-size: 20px;
-	font-family: Arial, sans-serif;
+	font-family: DejaVuSansMono, monospace;
 }
 .repo-h3{
 	color: white;
@@ -229,4 +233,30 @@ pre{
 	padding-top: 5px;
 	padding-bottom: 5px;
 	border-radius: 15px;
+}
+select{
+	color: white;
+	border: none;
+	background-color: #32363e;
+	padding-top: 5px;
+	padding-bottom: 8px;
+	border-radius: 10px;
+	margin-top: 15px;
+	padding-left: 15px;
+	font-size: 20px;
+}
+.branch-button{
+	color: white;
+	border: none;
+	background-color: #32363e;
+	padding-top: 7px;
+	padding-bottom: 10px;
+	border-radius: 10px;
+	margin-top: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
+	font-size: 20px;
+}
+.branch-button:hover{
+	 background-color: #52525e;
 }
