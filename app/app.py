@@ -252,6 +252,7 @@ def repo(id, selected_branch="master"):
     return render_template('repo.html', files=files, commits=commits, name=id, desc=repo_dict[id][1], path=repo_dict[id][0], branches=branches, current_branch=selected_branch)
 
 @app.route("/<repo>/<branch>/<file>")
+@login_required
 def file_viewer(repo, file, branch):
     path=f"{config_dict['storage_path']}{repo}.git"
     os.chdir(path)
@@ -261,10 +262,17 @@ def file_viewer(repo, file, branch):
         if file in line:
             file_path=line
     try:
-        file_contents=subprocess.check_output(['git', f'--git-dir={config_dict["storage_path"]}{repo}.git', 'cat-file', '-p', f'{branch}:{file_path}']).decode('utf-8') 
+        file_contents=subprocess.check_output(['git', f'--git-dir={config_dict["storage_path"]}{repo}.git', 'cat-file', '-p', f'{branch}:{file_path}']).decode('utf-8').strip()
+        file_contents=file_contents.split("\n")
+        last_commit=subprocess.check_output(['git', 'log', '-1', branch, '--pretty=%B', '--', file_path]).decode('utf-8').strip()
+        file_size=subprocess.check_output(['git', 'cat-file', '-s', f'{branch}:{file_path}']).decode('utf-8').strip()
+        if int(file_size)>=1024:
+            file_size=str(round(int(file_size)/1024, 2))+" KB"
+        else:
+            file_size=file_size+" Bytes"
     except subprocess.CalledProcessError:
-        file_contents="An error occurred while trying to read file contents"
-    return render_template("file_viewer.html", file=file, file_contents=file_contents, name=repo, file_path=file_path)
+        file_contents="An error occurred"
+    return render_template("file_viewer.html", file=file, file_contents=file_contents, name=repo, file_path=file_path, last_commit=last_commit, file_size=file_size)
 
 ############################################################################
 

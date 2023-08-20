@@ -8,10 +8,17 @@
 	</head>
 	<body>
 		<div class="filex">
-			<h3 style="margin:0;"><a href="{{url_for("repo", id=name)}}"><span style="color: #8cc04b;">&#129136; {{name}}/</span></a><span style="color: #c7053d;">{{file_path}}</span></h3>
-			<br>
+			<h3 class="name"><a href="{{url_for("repo", id=name)}}" class="name">&#129136; {{name}}/</a>{{file_path}}</h3>
+			<h3 class="desc">Last commit: {{last_commit}}</h3>
+			<h4 style="color: white; margin-left: 15px;">{{file_contents|count}} lines · {{file_size}}</h3>
 			<div class="files-filex">
-				<pre class="script">{{file_contents | escape}}</pre>
+				{% if file_contents is string %}
+					<pre class="script">{{file_contents}}</pre>
+				{% else %}
+					{% for i in range(file_contents|count) %}
+						<pre class="script"><span style="color: gray;">{{i+1}}  </span>{{file_contents[i]|escape}}</pre>
+					{% endfor %}
+				{% endif %}
 			</div>
 		</div>
 	</body>
