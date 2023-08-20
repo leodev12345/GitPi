@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{{file}} - GitPi</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
+		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+	</head>
+	<body>
+		<div class="filex">
+			<h3 style="margin:0;"><a href="{{url_for("repo", id=name)}}"><span style="color: #8cc04b;">&#129136; {{name}}/</span></a><span style="color: #c7053d;">{{file_path}}</span></h3>
+			<br>
+			<div class="files-filex">
+				<pre class="script">{{file_contents | escape}}</pre>
+			</div>
+		</div>
+	</body>
+</html>

@@ -28,7 +28,17 @@
 			</form>
 			<h3 class="repo-h3">Files</h3>
 			<div class="files">
-				<pre>{{files}}</pre>
+				{% if files is string %}
+					<pre>{{files}}</pre>
+				{% else %}	
+					{% for file in files %}
+						{% if file[-1]=="/" or "➔" in file %}
+							<pre>{{file}}</pre>
+						{% else %}
+							<a href="{{url_for("file_viewer", repo=name, file=file | remove_non_text, branch=current_branch)}}"><pre>{{file}}</pre></a>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
 			</div>
 			<h3 class="repo-h3">Commit history</h3>
 			<div class="files">

@@ -4,10 +4,11 @@ import os
 import bcrypt
 from functools import wraps
 import subprocess
+import string
+import re
 
-#charecters not allowed in repo names
-ilegal_charecters=[" ","#","<",">","$","+","%","!","`","&","*","|","{","}","[","]","@",":","/","\"","\\","\'","(",")","=","?","€",";",".",",","§","¤","ß","Ł","ł","÷","×","¸","¨","~","ˇ","^","˘","°","˛","˙","´","˝"]
-
+# ASCII charecters not allowed in repo names
+ilegal_charecters = string.punctuation.replace("-", " ").replace("_", "")
 #get current working path and chdir into it 
 current_path=os.path.abspath(os.getcwd())
 os.chdir(current_path)
@@ -41,6 +42,8 @@ def write_json(value):
     with open("database/data.json", "w") as file:
         file.write(json_object)
 
+#function that formats the output of git ls-tree into a more tree looking structure
+#I don't know how it works
 def organize_files(file_list, name, branch):
     lines = file_list.strip().split('\n')
     file_structure = {}
@@ -69,8 +72,14 @@ def organize_files(file_list, name, branch):
         return result
 
     organized_files = create_structure(file_structure)
+    organized_files = f"{name}➔{branch}\n{organized_files}"
+    
+    return organized_files
 
-    return f"{name}|{branch}\n"+organized_files
+def remove_non_text(text):
+    return re.sub(r'[└─├─│ ]', '', text)
+
+app.jinja_env.filters['remove_non_text'] = remove_non_text
 
 ############################## Homepage ##############################
 
@@ -231,6 +240,7 @@ def repo(id, selected_branch="master"):
         branches = branches.replace("* ", "").replace("  ", "").strip().split("\n")
         files = subprocess.check_output(['git', 'ls-tree', '--name-only', '-r', selected_branch]).decode('utf-8')
         files=organize_files(files, id, selected_branch)
+        files=files.split("\n")
         commits = subprocess.check_output(['git', 'log', '--pretty=%B', '--first-parent', selected_branch]).decode('utf-8').strip()
     #if above commands return an error(if the repository contains no files or commits)
     except subprocess.CalledProcessError:
@@ -240,6 +250,21 @@ def repo(id, selected_branch="master"):
         branches=["No branches created"]
     #render page and pass all variables to it
     return render_template('repo.html', files=files, commits=commits, name=id, desc=repo_dict[id][1], path=repo_dict[id][0], branches=branches, current_branch=selected_branch)
+
+@app.route("/<repo>/<branch>/<file>")
+def file_viewer(repo, file, branch):
+    path=f"{config_dict['storage_path']}{repo}.git"
+    os.chdir(path)
+    files = subprocess.check_output(['git', 'ls-tree', '--name-only', '-r', branch]).decode('utf-8')
+    files=files.split("\n")
+    for line in files:
+        if file in line:
+            file_path=line
+    try:
+        file_contents=subprocess.check_output(['git', f'--git-dir={config_dict["storage_path"]}{repo}.git', 'cat-file', '-p', f'{branch}:{file_path}']).decode('utf-8') 
+    except subprocess.CalledProcessError:
+        file_contents="An error occurred while trying to read file contents"
+    return render_template("file_viewer.html", file=file, file_contents=file_contents, name=repo, file_path=file_path)
 
 ############################################################################
 

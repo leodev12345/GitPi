@@ -176,6 +176,19 @@ form{
 	margin-right: 23%;
 	width: 50%;
 }
+.filex{
+	background-color: #282c34;
+	padding-top: 15px;
+	padding-bottom: 25px;
+	padding-left: 25px;
+	padding-right: 25px;
+	border-radius: 15px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	margin-left: 30px;
+	margin-right: 30px;
+	text-align: left;
+}
 .repo button{
 	text-align: right;
 }
@@ -220,6 +233,13 @@ pre{
 	color: white;
 	font-size: 20px;
 	font-family: DejaVuSansMono, monospace;
+	margin: 0;
+}
+.script{
+	color: white;
+	font-size: 15px;
+	font-family: DejaVuSansMono, monospace;
+	margin: 0;
 }
 .repo-h3{
 	color: white;
@@ -230,9 +250,20 @@ pre{
 	background-color: #32363e;
 	padding-left: 20px;
 	padding-right: 150px;
-	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-top: 15px;
+	padding-bottom: 15px;
 	border-radius: 15px;
+	overflow-x: auto;
+}
+.files-filex{
+	text-align: left;
+	background-color: #32363e;
+	padding-left: 20px;
+	padding-right: 150px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	border-radius: 15px;
+	overflow-x: auto;
 }
 select{
 	color: white;
