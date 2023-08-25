@@ -14,7 +14,7 @@
 			<hr>
 			<h3 class="path">Path: {{path}}<a href="#" onclick="copy('{{path}}')" class="more-link-2"> &#x2398;</a></h3>
 			<br>
-			<form method="POST">
+			<form method="POST" action="{{url_for("repo", id=name, selected_branch=current_branch)}}">
 				<select name="branch_select">
 					{% for branch in branches %}
 						{% if branch == current_branch %}
@@ -35,7 +35,7 @@
 						{% if file[-1]=="/" or "➔" in file %}
 							<pre>{{file}}</pre>
 						{% else %}
-							<a href="{{url_for("file_viewer", repo=name, file=file | remove_non_text, branch=current_branch)}}"><pre>{{file}}</pre></a>
+							<a href="{{url_for("file_viewer", repo=name, file=file | remove_tree, branch=current_branch)}}"><pre>{{file}}</pre></a>
 						{% endif %}
 					{% endfor %}
 				{% endif %}

@@ -25,7 +25,7 @@
 		<div class="container">
 			{% for key, value in repos.items() %}
 				<div class="repo" id="{{key}}">
-					<a href="{{url_for('repo', id=key)}}"><h3 class="name">{{key}}</h3></a>
+					<a href="{{url_for('repo', id=key, selected_branch="master")}}"><h3 class="name">{{key}}</h3></a>
 					<h3 class="desc">{{value[1]}}</h3>
 					<hr>
 					<h3 class="path">Path: {{value[0]}}<a href="#" onclick="copy('{{value[0]}}')" class="more-link-2"> &#x2398;</a></h3>

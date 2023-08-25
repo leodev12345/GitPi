@@ -76,10 +76,11 @@ def organize_files(file_list, name, branch):
     
     return organized_files
 
-def remove_non_text(text):
+#a custom jinja filter that removes tree structure symbols from a specified text line
+def remove_tree(text):
     return re.sub(r'[└─├─│ ]', '', text)
 
-app.jinja_env.filters['remove_non_text'] = remove_non_text
+app.jinja_env.filters['remove_tree'] = remove_tree
 
 ############################## Homepage ##############################
 
@@ -225,12 +226,15 @@ def login():
 
 ############################## Repo info page ##############################
 
-#endpoint with variable route containing repository name and the default branch
-@app.route("/<id>", methods=['GET', 'POST'])
+#repository page variable route containing repository name and the default branch
+@app.route("/<id>/<selected_branch>", methods=['GET', 'POST'])
 @login_required
 def repo(id, selected_branch="master"):
+    #if user changed the branch
     if request.method=="POST":
         selected_branch=request.form.get("branch_select")
+        #refreh page
+        return redirect(url_for("repo", id=id, selected_branch=selected_branch))
     try:
         #get full repository path and chdir into it
         path=f"{config_dict['storage_path']}{id}.git"
@@ -239,9 +243,10 @@ def repo(id, selected_branch="master"):
         branches = subprocess.check_output(['git', 'branch', '-a']).decode("utf-8")
         branches = branches.replace("* ", "").replace("  ", "").strip().split("\n")
         files = subprocess.check_output(['git', 'ls-tree', '--name-only', '-r', selected_branch]).decode('utf-8')
+        commits = subprocess.check_output(['git', 'log', '--pretty=%B', '--first-parent', selected_branch]).decode('utf-8').strip()
+        #organise list of files into a tree structure and seperate it into lines
         files=organize_files(files, id, selected_branch)
         files=files.split("\n")
-        commits = subprocess.check_output(['git', 'log', '--pretty=%B', '--first-parent', selected_branch]).decode('utf-8').strip()
     #if above commands return an error(if the repository contains no files or commits)
     except subprocess.CalledProcessError:
         #set default file, branch and commit values
@@ -251,30 +256,65 @@ def repo(id, selected_branch="master"):
     #render page and pass all variables to it
     return render_template('repo.html', files=files, commits=commits, name=id, desc=repo_dict[id][1], path=repo_dict[id][0], branches=branches, current_branch=selected_branch)
 
+############################## File viewer page ##############################
+
+#file viewer page containing the repo name, selcted branch and the file name
 @app.route("/<repo>/<branch>/<file>")
 @login_required
-def file_viewer(repo, file, branch):
+def file_viewer(repo, file, branch, nohighlight=""):
+    #get path to selected repository and chdir into it
     path=f"{config_dict['storage_path']}{repo}.git"
     os.chdir(path)
+    #run git ls-tree and split output into individual lines
     files = subprocess.check_output(['git', 'ls-tree', '--name-only', '-r', branch]).decode('utf-8')
     files=files.split("\n")
+    #get full path to selected file by looping through individual lines and checking if the file matches
     for line in files:
-        if file in line:
+        if file == line.split("/")[-1]:
             file_path=line
     try:
+        #get selected file contents using git cat-file
         file_contents=subprocess.check_output(['git', f'--git-dir={config_dict["storage_path"]}{repo}.git', 'cat-file', '-p', f'{branch}:{file_path}']).decode('utf-8').strip()
-        file_contents=file_contents.split("\n")
+        #get number of lines in a file and set file lenght to zero if its empty
+        file_lines=file_contents.split("\n")
+        if len(file_lines)==1 and file_lines[0]=="":
+            file_lines=[]
+        lenght=len(file_lines)
+        #get last git commit message
         last_commit=subprocess.check_output(['git', 'log', '-1', branch, '--pretty=%B', '--', file_path]).decode('utf-8').strip()
+        #get file size in bytes
         file_size=subprocess.check_output(['git', 'cat-file', '-s', f'{branch}:{file_path}']).decode('utf-8').strip()
-        if int(file_size)>=1024:
-            file_size=str(round(int(file_size)/1024, 2))+" KB"
-        else:
-            file_size=file_size+" Bytes"
+        #convert value from bytes into larger units and format them with their unit
+        size_units={
+            0: "Bytes",
+            1024: "KB",
+            1024**2: "MB",
+            1024**3: "GB"
+        }
+        for key in size_units:
+            if int(file_size)>=key:
+                try:
+                    size=f"{str(round(int(file_size)/key, 2))} {size_units[key]}"
+                except ZeroDivisionError:
+                    size=f"{file_size} {size_units[key]}"
+    #if an error occurrs when executing one of the commands above
     except subprocess.CalledProcessError:
         file_contents="An error occurred"
-    return render_template("file_viewer.html", file=file, file_contents=file_contents, name=repo, file_path=file_path, last_commit=last_commit, file_size=file_size)
+        lenght="Error"
+        last_commit="Error"
+        size="Error"
+    #get file extension and the first line in the file and define plain text file extensions
+    file_extension=os.path.splitext(file)[-1]
+    first_line=file_contents.split("\n")[0]
+    plain_text_extensions=[".txt", ".log", ".asc", ".rtf"]
+    #disable syntax highlighting by passing the "language-plaintext" to class of <code> element
+    #if file extension is plain text extension or if file has no extension and contains no shebang
+    if file_extension in plain_text_extensions or not file_extension and "#!" not in first_line:
+        nohighlight="language-plaintext"
+    #render the file_viewer.html with all th arguments needed
+    return render_template("file_viewer.html", file=file, file_contents=file_contents, name=repo, file_path=file_path, last_commit=last_commit, file_size=size, lenght=lenght, nohighlight=nohighlight, branch=branch)
 
-############################################################################
+##############################################################################
 
 #run the app(debug only!)
 if __name__ == '__main__':

@@ -183,6 +183,8 @@ form{
 	padding-left: 25px;
 	padding-right: 25px;
 	border-radius: 15px;
+	border: solid 5px;
+	border-color: #32363e;
 	margin-top: 30px;
 	margin-bottom: 30px;
 	margin-left: 30px;
@@ -236,10 +238,8 @@ pre{
 	margin: 0;
 }
 .script{
-	color: white;
 	font-size: 15px;
 	font-family: DejaVuSansMono, monospace;
-	margin: 0;
 }
 .repo-h3{
 	color: white;
@@ -289,5 +289,21 @@ select{
 	font-size: 20px;
 }
 .branch-button:hover{
-	 background-color: #52525e;
+	background-color: #52525e;
+}
+.hljs-ln-numbers {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-align: center;
+    color: grey;
+    border-right: 10px solid #282c34;
+    vertical-align: top;
+    padding-right: 5px;
+    }
+.hljs-ln-code {
+	padding-left: 10px;
 }

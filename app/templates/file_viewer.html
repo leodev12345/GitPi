@@ -3,23 +3,22 @@
 	<head>
 		<title>{{file}} - GitPi</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">		
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.3.1/styles/atom-one-dark.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
 		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 	</head>
 	<body>
 		<div class="filex">
-			<h3 class="name"><a href="{{url_for("repo", id=name)}}" class="name">&#129136; {{name}}/</a>{{file_path}}</h3>
+			<h3 class="name"><a href="{{url_for("repo", id=name, selected_branch=branch)}}" class="name">&#129136; {{name}}/</a>{{file_path}}</h3>
 			<h3 class="desc">Last commit: {{last_commit}}</h3>
-			<h4 style="color: white; margin-left: 15px;">{{file_contents|count}} lines · {{file_size}}</h3>
-			<div class="files-filex">
-				{% if file_contents is string %}
-					<pre class="script">{{file_contents}}</pre>
-				{% else %}
-					{% for i in range(file_contents|count) %}
-						<pre class="script"><span style="color: gray;">{{i+1}}  </span>{{file_contents[i]|escape}}</pre>
-					{% endfor %}
-				{% endif %}
-			</div>
+			<h4 style="color: white; margin-left: 15px;">{{lenght}} lines · {{file_size}}</h3>
+			<pre class="script"><code class="filex {{nohighlight}}" style="margin:0">{{file_contents|escape}}</code></pre>
 		</div>
+		<script>
+			hljs.highlightAll();
+        	hljs.initLineNumbersOnLoad();
+		</script>
 	</body>
 </html>
