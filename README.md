@@ -46,13 +46,13 @@ Homepage
 ![Homepage](./screenshots/homepage.png)
 
 Repository info page
-![Repo_info](./screenshots/repo_page.png)
+![Repo_info](./screenshots/repo_info_page.png)
 
 File viewer page
-![File_viewer](./screenshots/file_viewer.png)
+![File_viewer](./screenshots/file_viewer_page.png)
 
 More options page
-![More](./screenshots/more_options.png)
+![More](./screenshots/more_options_page.png)
 
 ## Setup
 Dependencies

@@ -55,10 +55,19 @@ def organize_files(file_list, name, branch):
             if part not in current:
                 current[part] = {}
             current = current[part]
-
     def create_structure(structure, indent=""):
         result = ""
-        keys = list(structure.keys())
+        folders = []
+        files = []
+
+        for name, content in structure.items():
+            if content:
+                folders.append(name)
+            else:
+                files.append(name)
+
+        keys = folders + files  # First add folders, then files
+
         for index, name in enumerate(keys):
             content = structure[name]
             last_item = index == len(keys) - 1
@@ -69,9 +78,9 @@ def organize_files(file_list, name, branch):
             else:
                 result += f"{indent}{'└─ ' if last_item else '├─ '}{name}\n"
         return result
-
+    
     organized_files = create_structure(file_structure)
-    organized_files = f"{name}.git➔{branch}\n{organized_files}"
+    organized_files = f"{name}➔{branch}\n{organized_files}" 
     
     return organized_files
 
@@ -304,11 +313,12 @@ def file_viewer(repo, file, branch, nohighlight=""):
             elif int(file_size)>=key:
                 size=f"{round(int(file_size)/key, 2)} {value}"
     #if an error occurrs when executing one of the commands above
-    except subprocess.CalledProcessError:
-        file_contents="An error occurred"
-        lenght="Error"
+    except (subprocess.CalledProcessError, UnicodeDecodeError):
+        file_contents="An error occurred while reading this file, either the file type is not supported or one of the git commands failed to run"
+        lenght=0
         last_commit="Error"
-        size="Error"
+        size="0 Bytes"
+        nohighlight="language-plaintext"
     #get file extension and the first line in the file and define plain text file extensions
     file_extension=os.path.splitext(file)[-1]
     first_line=file_contents.split("\n")[0]
