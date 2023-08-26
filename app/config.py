@@ -192,7 +192,7 @@ def change_config():
             print("[4] Delete app data")
             print("[5] Go back")
             print("\n", end="")
-            prompt=int(input("Chose option: "))
+            prompt=int(input("Chose an option: "))
             #run the function assigned to a specified option
             func_dict_2[prompt]()
         #invalid input
@@ -283,7 +283,7 @@ while prompt!=5:
         print("[4] Display current configuration")
         print("[5] Exit")
         print("\n", end="")
-        prompt=int(input("Chose option: "))
+        prompt=int(input("Chose an option: "))
         #run function assigned to the specified option
         func_dict_1[prompt]()
     #invalid input

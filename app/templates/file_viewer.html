@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>{{file}} - GitPi</title>
+		<title>{{variables['file']}} - GitPi</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">		
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.3.1/styles/atom-one-dark.min.css">
@@ -11,10 +11,10 @@
 	</head>
 	<body>
 		<div class="filex">
-			<h3 class="name"><a href="{{url_for("repo", id=name, selected_branch=branch)}}" class="name">&#129136; {{name}}/</a>{{file_path}}</h3>
-			<h3 class="desc">Last commit: {{last_commit}}</h3>
-			<h4 style="color: white; margin-left: 15px;">{{lenght}} lines · {{file_size}}</h3>
-			<pre class="script"><code class="filex {{nohighlight}}" style="margin:0">{{file_contents|escape}}</code></pre>
+			<h3 class="name"><a href="{{url_for("repo", repo=variables['name'], selected_branch=variables['branch'])}}" class="name">&#129136; {{variables['name']}}/</a>{{variables['file_path']}}</h3>
+			<h3 class="desc">Last commit: {{variables['last_commit']}}</h3>
+			<h4 style="color: white; margin-left: 15px;">{{variables['lenght']}} lines · {{variables['file_size']}}</h3>
+			<pre class="script"><code class="filex {{variables['nohighlight']}}" style="margin:0">{{variables['file_contents']|escape}}</code></pre>
 		</div>
 		<script>
 			hljs.highlightAll();

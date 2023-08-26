@@ -237,6 +237,9 @@ pre{
 	font-family: DejaVuSansMono, monospace;
 	margin: 0;
 }
+.file-tree{
+	line-height: 23px;
+}
 .script{
 	font-size: 15px;
 	font-family: DejaVuSansMono, monospace;

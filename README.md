@@ -23,13 +23,20 @@ Allows you to have some basic control over your repositories inside your browser
 - Creating repositories 
 - Renaming repositories 
 - Deleting repositories 
-- Display basic repository info
-   - Name 
+- Displaying repository information
+   - Name
    - Description
-   - Full path that you can copy to clipboard
+   - Path
+   - List of branches
    - File structure
    - Commit history
-
+- Viewing specific branch
+- Viewing file information
+   - File contents(read only) with syntax highlighting
+   - File path
+   - Last commit message for that specific file
+   - Number of lines
+   - Size
 
 ## Screenshots
 Login page
@@ -40,6 +47,9 @@ Homepage
 
 Repository info page
 ![Repo_info](./screenshots/repo_page.png)
+
+File viewer page
+![File_viewer](./screenshots/file_viewer.png)
 
 More options page
 ![More](./screenshots/more_options.png)
@@ -57,11 +67,7 @@ Pip:
 - Gunicorn
 
 ### What you need before installing the app
-- Basic understanding of linux and git
-- Linux device you will use as a server
-- SSH enabled
-- Static IP adress(DHCP reservation)
-- Place where you will store all of your repositories
+You need to have a git server and know how to use it.
 
 There are many guides like [this one](https://pimylifeup.com/raspberry-pi-git-server/) on how to setup a git server.
 
@@ -114,7 +120,7 @@ Now run `config.py`:
 
 `$ python3 config.py`
 
-Select option 1 for first time setup and than set everything up.
+Select option 1 for first time setup and than configure everything to your liking.
 
 ### 5. Run the app
 When you are inside the app directory run the app by using this command:
@@ -131,6 +137,10 @@ You can view all the repositories you created on the homepage and copy their pat
 
 To view more repository info click on the repository name.
 
+To change branch select a different branch from the dropdown menu and click change branch.
+
+To view a specific file click on its name in the file tree and the link will redirect you to the file viewer.
+
 If you want to rename, delete or change description of some repositories you can click the tree dots on the top navigation bar which will lead you to the more options page where you can also log out of the app.
 
 Also note when you delete a repository it's only deleted from the app and not from the server, I did this for security reasons.
@@ -140,19 +150,21 @@ You can use the terminal config program to view current configuration, to setup 
 
 If you already have git repositories inside your repository storage location you can import them into the app by selecting the option 3, the app will enter all of the repository data automaticly and you can only optionally add a repository description for each repository.
 ## Project Status
-I made this project for fun and to use it for my own git server and it's features are very limited, I might add more features later if I feel the need to.
+I made this project for fun and to use it for my own git server and its features are limited.
 
-I would also not recommend using this if your server is open to the internet, I don't know how secure this app is but I'm guessing that it's not, but if you are just using it on your private home network than it's fine.
+I would not recommend using this if your git server is open to the internet, I don't know how secure this app is but I'm guessing that it's not, but if you are just using it on your private home network than it's fine.
 
-Also I'm not certain on how many devices can access the server at once since I intended it to only be used by me on my home network.
+Also I'm not certain on how many devices can access the app at once since I intended it to only be used by me on my home network.
 
 Overall this is a very simple app I just made for fun so if you are looking for more features or for more security than you should just use something like gitea or something similar.
 
-If you want to add more feaures or to improve this project or to just use the code for your own project you can fork/clone this repository, I tried to document and comment the code as well as I could to make the code understandable.
+If you want to add more feaures or to improve this project or to just use the code for your own project you can fork/clone this repository and edit the source code.
 
 
 ## Credits
-I modified the Git logo that is created by [Jason Long](https://twitter.com/jasonlong) and licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/) to create the icon for the app, it's downloaded from [https://git-scm.com/downloads/logos](https://git-scm.com/downloads/logos) 
+I modified the Git logo that is created by [Jason Long](https://twitter.com/jasonlong) and licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/) to create the icon for the app, it's downloaded from [https://git-scm.com/downloads/logos](https://git-scm.com/downloads/logos)
+
+I included the DejaVuSansMono Nerd Font in the app which is licensed under the [SIL Open Font License, Version 1.1](https://scripts.sil.org/OFL) license and downloaded from [https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/DejaVuSansMono/Regular](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/DejaVuSansMono/Regular)
 ## Contact
 Email: [pycityproject@gmail.com](mailto:pycityproject@gmail.com)
 

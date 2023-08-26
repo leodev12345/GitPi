@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>{{name}} - GitPi</title>
+		<title>{{variables['name']}} - GitPi</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
 		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -9,15 +9,17 @@
 	</head>
 	<body>
 		<div class="repo-div">
-			<h3 class="name" style="display: inline"><a href="/#{{name}}" class="name">&#129136; {{name}}</a></h3>
-			<h3 class="desc">{{desc}}</h3>
+			<h3 class="name" style="display: inline"><a href="/#{{variables['name']}}" class="name">&#129136; {{variables['name']}}</a></h3>
+			<h3 class="desc">{{variables['desc']}}</h3>
 			<hr>
-			<h3 class="path">Path: {{path}}<a href="#" onclick="copy('{{path}}')" class="more-link-2"> &#x2398;</a></h3>
+			<h3 class="path">Path: {{variables['path']}}<a href="#" onclick="copy('{{variables['path']}}')" class="more-link-2"> &#x2398;</a></h3>
 			<br>
-			<form method="POST" action="{{url_for("repo", id=name, selected_branch=current_branch)}}">
+			<!--branch select dropdown menu-->
+			<form method="POST" action="{{url_for("repo", repo=variables['name'], selected_branch=variables['current_branch'])}}">
 				<select name="branch_select">
-					{% for branch in branches %}
-						{% if branch == current_branch %}
+					{% for branch in variables['branches'] %}
+						<!--set current branch as a defualt option-->
+						{% if branch == variables['current_branch'] %}
 							<option value={{branch}} selected={{branch}}>&#x2387; {{branch}}</option>
 						{% else %}
 							<option value={{branch}}>&#x2387; {{branch}}</option>
@@ -28,21 +30,25 @@
 			</form>
 			<h3 class="repo-h3">Files</h3>
 			<div class="files">
-				{% if files is string %}
-					<pre>{{files}}</pre>
-				{% else %}	
-					{% for file in files %}
+				<!--if there are no files in repo-->
+				{% if variables['files'] is string %}
+					<pre class="file-tree">{{variables['files']}}</pre>
+				{% else %}
+					{% for file in variables['files'] %}
+						<!--if the current line is a directory or repo root-->
 						{% if file[-1]=="/" or "➔" in file %}
-							<pre>{{file}}</pre>
+							<!--add the dir symbol imbetween tree indents and dir name-->
+							<pre class="file-tree">{{file|replace(file|remove_tree, "")}}🗀{{file|remove_tree}}</pre>
 						{% else %}
-							<a href="{{url_for("file_viewer", repo=name, file=file | remove_tree, branch=current_branch)}}"><pre>{{file}}</pre></a>
+							<!--make line into clickable link that opens the file viewer if its a file-->
+							<a href="{{url_for("file_viewer", repo=variables['name'], file=file | remove_tree, branch=variables['current_branch'])}}"><pre class="file-tree">{{file}}</pre></a>
 						{% endif %}
 					{% endfor %}
 				{% endif %}
 			</div>
 			<h3 class="repo-h3">Commit history</h3>
 			<div class="files">
-				<pre>{{commits}}</pre>
+				<pre class="file-tree">{{variables['commits']}}</pre>
 			</div>
 		</div>
 	</body>

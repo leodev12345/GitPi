@@ -43,7 +43,6 @@ def write_json(value):
         file.write(json_object)
 
 #function that formats the output of git ls-tree into a more tree looking structure
-#I don't know how it works
 def organize_files(file_list, name, branch):
     lines = file_list.strip().split('\n')
     file_structure = {}
@@ -72,7 +71,7 @@ def organize_files(file_list, name, branch):
         return result
 
     organized_files = create_structure(file_structure)
-    organized_files = f"{name}➔{branch}\n{organized_files}"
+    organized_files = f"{name}.git➔{branch}\n{organized_files}"
     
     return organized_files
 
@@ -184,10 +183,10 @@ def logout():
 
 #a dictionary that assigns every from submit attribute value to its endpoint name
 more_dict={
-    "rename": "rename_repo",
-    "remove": "delete_repo",
+    "rename":  "rename_repo",
+    "remove":  "delete_repo",
     "confirm": "change_repo_desc",
-    "logout": "logout"
+    "logout":  "logout"
 }
 
 #render more.html
@@ -227,17 +226,17 @@ def login():
 ############################## Repo info page ##############################
 
 #repository page variable route containing repository name and the default branch
-@app.route("/<id>/<selected_branch>", methods=['GET', 'POST'])
+@app.route("/<repo>/<selected_branch>", methods=['GET', 'POST'])
 @login_required
-def repo(id, selected_branch="master"):
+def repo(repo, selected_branch="master"):
     #if user changed the branch
     if request.method=="POST":
         selected_branch=request.form.get("branch_select")
         #refreh page
-        return redirect(url_for("repo", id=id, selected_branch=selected_branch))
+        return redirect(url_for("repo", repo=repo, selected_branch=selected_branch))
     try:
         #get full repository path and chdir into it
-        path=f"{config_dict['storage_path']}{id}.git"
+        path=f"{config_dict['storage_path']}{repo}.git"
         os.chdir(path)
         #get list of repository files and repository commit history
         branches = subprocess.check_output(['git', 'branch', '-a']).decode("utf-8")
@@ -245,7 +244,7 @@ def repo(id, selected_branch="master"):
         files = subprocess.check_output(['git', 'ls-tree', '--name-only', '-r', selected_branch]).decode('utf-8')
         commits = subprocess.check_output(['git', 'log', '--pretty=%B', '--first-parent', selected_branch]).decode('utf-8').strip()
         #organise list of files into a tree structure and seperate it into lines
-        files=organize_files(files, id, selected_branch)
+        files=organize_files(files, repo, selected_branch)
         files=files.split("\n")
     #if above commands return an error(if the repository contains no files or commits)
     except subprocess.CalledProcessError:
@@ -254,7 +253,16 @@ def repo(id, selected_branch="master"):
         commits="No commits yet"
         branches=["No branches created"]
     #render page and pass all variables to it
-    return render_template('repo.html', files=files, commits=commits, name=id, desc=repo_dict[id][1], path=repo_dict[id][0], branches=branches, current_branch=selected_branch)
+    variables={
+        "files":          files,
+        "commits":        commits,
+        "name":           repo,
+        "desc":           repo_dict[repo][1],
+        "path":           repo_dict[repo][0],
+        "branches":       branches,
+        "current_branch": selected_branch
+    }
+    return render_template('repo.html', variables=variables)
 
 ############################## File viewer page ##############################
 
@@ -286,17 +294,15 @@ def file_viewer(repo, file, branch, nohighlight=""):
         file_size=subprocess.check_output(['git', 'cat-file', '-s', f'{branch}:{file_path}']).decode('utf-8').strip()
         #convert value from bytes into larger units and format them with their unit
         size_units={
-            0: "Bytes",
-            1024: "KB",
+            0:       "Bytes",
+            1024:    "KB",
             1024**2: "MB",
-            1024**3: "GB"
         }
-        for key in size_units:
-            if int(file_size)>=key:
-                try:
-                    size=f"{str(round(int(file_size)/key, 2))} {size_units[key]}"
-                except ZeroDivisionError:
-                    size=f"{file_size} {size_units[key]}"
+        for key, value in size_units.items():
+            if key==0:
+                size=f"{file_size} {value}"
+            elif int(file_size)>=key:
+                size=f"{round(int(file_size)/key, 2)} {value}"
     #if an error occurrs when executing one of the commands above
     except subprocess.CalledProcessError:
         file_contents="An error occurred"
@@ -312,7 +318,18 @@ def file_viewer(repo, file, branch, nohighlight=""):
     if file_extension in plain_text_extensions or not file_extension and "#!" not in first_line:
         nohighlight="language-plaintext"
     #render the file_viewer.html with all th arguments needed
-    return render_template("file_viewer.html", file=file, file_contents=file_contents, name=repo, file_path=file_path, last_commit=last_commit, file_size=size, lenght=lenght, nohighlight=nohighlight, branch=branch)
+    variables={
+        "file":          file,
+        "file_contents": file_contents,
+        "name":          repo,
+        "file_path":     file_path,
+        "last_commit":   last_commit,
+        "file_size":     size,
+        "lenght":        lenght,
+        "nohighlight":   nohighlight,
+        "branch":        branch
+    }
+    return render_template("file_viewer.html", variables=variables)
 
 ##############################################################################
 
