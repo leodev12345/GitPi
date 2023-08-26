@@ -40,10 +40,10 @@ Allows you to have some basic control over your repositories inside your browser
 
 ## Screenshots
 Login page
-![Login](./screenshots/login_page.png)
+![Login](./screenshots/login.png)
 
 Homepage
-![Homepage](./screenshots/homepage.png)
+![Homepage](./screenshots/index_page.png)
 
 Repository info page
 ![Repo_info](./screenshots/repo_info_page.png)
