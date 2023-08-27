@@ -120,7 +120,38 @@ Now run `config.py`:
 
 `$ python3 config.py`
 
+This is the main screen of the config program:
+
+```
+Configuration options:
+
+[1] First time setup
+[2] Change configuration
+[3] Import local repositories into the app
+[4] Display current configuration
+[5] Exit
+
+Chose an option:
+```
+
 Select option 1 for first time setup and than configure everything to your liking.
+
+For example:
+
+```
+Create password: password
+Password set to password
+Set storage location for your repositories: /home/leo/git
+Storage path set to: /home/leo/git/
+Server IP adress: 192.168.42.52
+Set server user(leave blank for current linux user): git
+Server user: git
+Setup complete!
+
+Press ENTER to continue
+```
+
+The password you create is used to login into the web UI. The storage location is the place where all of your reposiotries will be stored. The program will also output the servers IP adress that you can use to access the web UI. The server user is the linux user that you will use to interact with the repositories over SSH, it is included in the repository path on the web UI, you can create a new user and select it or you can just use the user that you are currently logged into.
 
 ### 5. Run the app
 When you are inside the app directory run the app by using this command:

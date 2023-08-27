@@ -301,7 +301,7 @@ select{
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    text-align: center;
+    text-align: right;
     color: grey;
     border-right: 10px solid #282c34;
     vertical-align: top;
