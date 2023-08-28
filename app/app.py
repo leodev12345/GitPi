@@ -7,8 +7,10 @@ import subprocess
 import string
 import re
 
-# ASCII charecters not allowed in repo names
-ilegal_charecters = string.punctuation.replace("-", " ").replace("_", "")
+# all charecters allowed in repo names
+allowed_charecters = (
+    string.ascii_lowercase + string.ascii_uppercase + string.digits + ".-_"
+)
 # get current working path and chdir into it
 current_path = os.path.abspath(os.getcwd())
 os.chdir(current_path)
@@ -137,7 +139,11 @@ def create_repo():
     name = request.form["text"]
     desc = request.form["desc"]
     # checking info
-    if name != "" and any(ele in name for ele in ilegal_charecters) == False:
+    if (
+        name != ""
+        and all(char in allowed_charecters for char in name)
+        and name not in repo_dict
+    ):
         # set default description
         if desc == "":
             desc = "No description"
@@ -174,8 +180,9 @@ def rename_repo():
         old_name != new_name
         and new_name != ""
         and old_name != ""
-        and any(ele in new_name for ele in ilegal_charecters) == False
+        and all(char in allowed_charecters for char in new_name)
         and new_name not in repo_dict
+        and old_name in repo_dict
     ):
         # rename git repo on the server
         os.chdir(config_dict["storage_path"])
@@ -202,7 +209,11 @@ def delete_repo():
     delete_name = request.form["name_1"]
     delete_name_confirm = request.form["name_2"]
     # check data
-    if delete_name == delete_name_confirm and delete_name != "":
+    if (
+        delete_name == delete_name_confirm
+        and delete_name != ""
+        and delete_name in repo_dict
+    ):
         # delete repo key from local dict
         del repo_dict[delete_name]
         # write data to data.json
@@ -219,7 +230,7 @@ def change_repo_desc():
     repo_name = request.form["repo_name"]
     new_desc = request.form["new_desc"]
     # check data
-    if repo_name != "" and new_desc != "":
+    if repo_name != "" and new_desc != "" and repo_name in repo_dict:
         # change data in local repo dict
         repo_dict[repo_name][1] = new_desc
         # write data to data.json
