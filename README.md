@@ -7,7 +7,7 @@
 * [Screenshots](#screenshots)
 * [Setup](#setup)
 * [Usage](#usage)
-* [Project Status](#project-status)
+* [Limitations](#limitations)
 * [Credits](#credits)
 * [Contact](#contact)
 
@@ -55,6 +55,9 @@ More options page
 ![More](./screenshots/more_options_page.png)
 
 ## Setup
+
+> NOTE: If you plan to run this app on your server that is open to the internet I would highly advise against it, this app was made to run inside a private home network, for more info check out [limitations](#limitations).
+
 Dependencies
 
 Apt:
@@ -180,7 +183,7 @@ Also note when you delete a repository it's only deleted from the app and not fr
 You can use the terminal config program to view current configuration, to setup the app or to change certain options, you can also delete all repository data from the app if you ever need to re import your repositories for some reason.
 
 If you already have git repositories inside your repository storage location you can import them into the app by selecting the option 3, the app will enter all of the repository data automaticly and you can only optionally add a repository description for each repository.
-## Project Status
+## Limitations
 I made this project for fun and to use it for my own git server and its features are limited.
 
 I would not recommend using this if your git server is open to the internet, I don't know how secure this app is but I'm guessing that it's not, but if you are just using it on your private home network than it's fine.

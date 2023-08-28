@@ -84,6 +84,22 @@ def organize_files(file_list, name, branch):
     
     return organized_files
 
+# dictionary used to conevrt bytes to a larger unit
+size_units={
+    0:       "Bytes",
+    1024:    "KB",
+    1024**2: "MB",
+}
+
+#function that converts size value from bytes into larger units and format them with their unit
+def convert_bytes(file_size):
+    for key, value in size_units.items():
+        if key==0:
+            size=f"{file_size} {value}"
+        elif int(file_size)>=key:
+            size=f"{round(int(file_size)/key, 2)} {value}"
+    return size
+
 #a custom jinja filter that removes tree structure symbols from a specified text line
 def remove_tree(text):
     return re.sub(r'[└─├─│ ]', '', text)
@@ -301,23 +317,21 @@ def file_viewer(repo, file, branch, nohighlight=""):
         last_commit=subprocess.check_output(['git', 'log', '-1', branch, '--pretty=%B', '--', file_path]).decode('utf-8').strip()
         #get file size in bytes
         file_size=subprocess.check_output(['git', 'cat-file', '-s', f'{branch}:{file_path}']).decode('utf-8').strip()
-        #convert value from bytes into larger units and format them with their unit
-        size_units={
-            0:       "Bytes",
-            1024:    "KB",
-            1024**2: "MB",
-        }
-        for key, value in size_units.items():
-            if key==0:
-                size=f"{file_size} {value}"
-            elif int(file_size)>=key:
-                size=f"{round(int(file_size)/key, 2)} {value}"
-    #if an error occurrs when executing one of the commands above
-    except (subprocess.CalledProcessError, UnicodeDecodeError):
-        file_contents="An error occurred while reading this file, either the file type is not supported or one of the git commands failed to run"
+        file_size=convert_bytes(file_size)
+    #if an error occurrs when executing one of the git commands above
+    except subprocess.CalledProcessError:
+        file_contents="An error occurred while reading this file, one of the git commands failed to run"
         lenght=0
         last_commit="Error"
-        size="0 Bytes"
+        file_size="0 Bytes"
+        nohighlight="language-plaintext"
+    #if file type is not supported
+    except UnicodeDecodeError:
+        file_contents="File type not supported"
+        lenght=0
+        last_commit=subprocess.check_output(['git', 'log', '-1', branch, '--pretty=%B', '--', file_path]).decode('utf-8').strip()
+        file_size=subprocess.check_output(['git', 'cat-file', '-s', f'{branch}:{file_path}']).decode('utf-8').strip()
+        file_size=convert_bytes(file_size)
         nohighlight="language-plaintext"
     #get file extension and the first line in the file and define plain text file extensions
     file_extension=os.path.splitext(file)[-1]
@@ -334,7 +348,7 @@ def file_viewer(repo, file, branch, nohighlight=""):
         "name":          repo,
         "file_path":     file_path,
         "last_commit":   last_commit,
-        "file_size":     size,
+        "file_size":     file_size,
         "lenght":        lenght,
         "nohighlight":   nohighlight,
         "branch":        branch
