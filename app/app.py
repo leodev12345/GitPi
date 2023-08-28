@@ -131,6 +131,7 @@ def index_render():
 
 # creating repositories
 @app.route("/", methods=["POST"])
+@login_required
 def create_repo():
     # collecting info on form sumit
     name = request.form["text"]
@@ -163,6 +164,7 @@ def create_repo():
 
 # rename repository
 @app.route("/more/rename", methods=["POST"])
+@login_required
 def rename_repo():
     # get all the data from the form
     old_name = request.form["old_name"]
@@ -194,6 +196,7 @@ def rename_repo():
 
 # delete repository from app
 @app.route("/more/delete", methods=["POST"])
+@login_required
 def delete_repo():
     # get all the data from form
     delete_name = request.form["name_1"]
@@ -210,6 +213,7 @@ def delete_repo():
 
 # change repo description
 @app.route("/more/change_desc", methods=["POST"])
+@login_required
 def change_repo_desc():
     # get all the data from the form
     repo_name = request.form["repo_name"]
@@ -226,6 +230,7 @@ def change_repo_desc():
 
 # log out
 @app.route("/logout", methods=["POST"])
+@login_required
 def logout():
     # delete logged-in session to log out the user
     session.pop("logged-in", None)
@@ -251,6 +256,7 @@ def more_render():
 
 # more options main page functionality
 @app.route("/more", methods=["POST"])
+@login_required
 def more():
     # find which name attribute request.form contains and redirect to proper page
     for key in request.form:
