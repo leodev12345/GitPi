@@ -236,6 +236,8 @@ pre{
 	font-size: 20px;
 	font-family: DejaVuSansMono, monospace;
 	margin: 0;
+	tab-size: 4;
+	-moz-tab-size: 4;
 }
 .file-tree{
 	line-height: 23px;
