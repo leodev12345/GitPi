@@ -154,6 +154,7 @@ def create_repo():
         os.mkdir(dir_name)
         os.chdir(dir_name)
         os.system("git init --bare")
+        os.system("git symbolic-ref HEAD refs/heads/main")
 
         # path to the repo
         path = f"{config_dict['server_user']}@{config_dict['server_IP']}:{config_dict['storage_path']}{name}.git"
@@ -306,7 +307,7 @@ def login():
 # repository page variable route containing repository name and the default branch
 @app.route("/<repo>/<selected_branch>", methods=["GET", "POST"])
 @login_required
-def repo(repo, selected_branch="master"):
+def repo(repo, selected_branch="main"):
     # if user changed the branch
     if request.method == "POST":
         selected_branch = request.form.get("branch_select")
@@ -337,7 +338,11 @@ def repo(repo, selected_branch="master"):
         # set default file, branch and commit values
         files = "No files are created yet"
         commits = "No commits yet"
-        branches = ["No branches created"]
+        branches = subprocess.check_output(["git", "branch", "-a"]).decode("utf-8")
+        branches = branches.replace("* ", "").replace("  ", "").strip().split("\n")
+        # if list of branches is empty
+        if branches == [""]:
+            branches = ["No branches are created yet"]
     # render page and pass all variables to it
     variables = {
         "files": files,
