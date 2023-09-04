@@ -1,0 +1,12 @@
+version: "3"
+
+services:  
+  gitpi:
+    image: gitpi:latest
+    container_name: gitpi
+    ports:
+      - "6565:80"
+    volumes:
+      - ./database/config.json:/app/database/config.json
+      - ./database/data.json:/app/database/data.json
+    restart: always
