@@ -67,6 +67,7 @@ def first_time_setup():
         output = subprocess.check_output(["hostname", "-I"]).decode("utf-8")
         # remove \n from the end of the command output
         host_ip = output.strip()
+        host_ip = host_ip.split()[0]
         # store path into local dict
         config_dict["server_IP"] = host_ip
         print(f"Server IP adress: {host_ip}")

@@ -1,1 +1,10 @@
-{}
+{
+    "vim-dotfiles-linux": [
+        "leo@192.168.1.100:/mnt/raid/gitpi/repos/vim-dotfiles-linux.git",
+        "Vim config for linux"
+    ],
+    "bunkeri-rijeka": [
+        "leo@192.168.1.100:/mnt/raid/gitpi/repos/bunkeri-rijeka.git",
+        "Bunkeri Rijeka web stranica"
+    ]
+}
