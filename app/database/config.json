@@ -1,7 +1,1 @@
-{
-    "password": "$2b$12$5v5nojk3axShoyvUrUlgwOT0fqDTcpkTVtNBSpKO7zn47aEolhmdi",
-    "storage_path": "/mnt/raid/gitpi/repos/",
-    "server_IP": "192.168.1.100",
-    "server_user": "leo",
-    "app_secret_key": "087d3f35688ca962642ba662ec01d990825a4b5274167042"
-}
+{}
