@@ -1,314 +1,399 @@
 .topnav {
-	background-color: #282c34;
-	overflow: hidden;
-	padding:15px 15px;
-	padding-left: 55px;
-	position: fixed;
-	top: 0;
-	width: 100%;
+  background-color: #282c34;
+  overflow: hidden;
+  padding-left: 15px;
+  padding-right: 35px;
+  position: fixed;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
-body{
-	margin: 0;
-	padding: 0;
-	background-color: #32363e;
-	font-family: Arial, sans-serif;
+
+.left-side {
+  display: flex;
+  align-items: center; /* Align logo, h2, and form vertically centered */
+  flex-grow: 1; /* This allows the left items to take available space */
 }
-a{
-	text-decoration:none;
+
+.left-side > * {
+  margin-right: 10px; /* Adds space between the logo, h2, and form */
 }
-.button{
-	background-color: #8cc04b;
-	color: white;
-	border: none;
-	border-radius: 15px;
-	padding: 7px 7px 7px 7px;
+
+form {
+  display: flex;
+  align-items: center;
 }
-.red-button{
-	background-color: #c7053d;
-	color: white;
-	border: none;
-	border-radius: 15px;
-	padding: 7px 7px 7px 7px;
+
+.label {
+  background-color: #32363e;
+  color: white;
+  border: solid;
+  border-color: white;
+  border-radius: 15px;
+  padding: 7px 7px 7px 7px;
+  margin-right: 10px; /* Space between input fields */
 }
-.red-button:hover{
-	background-color: #e30545;
+
+.button {
+  background-color: #8cc04b;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 7px 7px 7px 7px;
 }
-.red-button:active{
-	background-color: #e30545;
+
+.more-link {
+  color: white;
+  text-decoration: none;
+  font-size: 25px;
+  margin-right: 35px;
+  margin-left: 15px; /* Push the "More" link to the far right */
 }
-.button:hover{
-	background-color: #93c94f;
-}
-.button:active{
-	background-color: #93c94f;
-}
-.button-more{
-	background-color: #8cc04b;
-	color: white;
-	border: none;
-	border-radius: 15px;
-	padding: 7px 7px 7px 7px;
-	text-decoration: none; !important
-}
-.button-more:hover{
-	background-color: green;
-}
-.button-more:active{
-	background-color: #8cc04b;
-}
-.h2{
-	display: inline;
-	padding-right: 10px;
-	color: white;
-}
-.login-text{
-	color: white;
-	text-align: center;
-}
-.logo{
-	width: 200px;
-	height: 200px;
-	margin: none;
-	padding: none;
-}
-.logo-small{
-	max-height: 70%;
-	max-width: 70%;
-	width: auto;
+
+.logo-small {
+  	width: 50px;
 	height: auto;
-	position: absolute;
-	top: 5%;
-	bottom: 20%;
-	left: 0;
-	right: 100%;
-	padding-left: 0.5%;
-	margin: auto;
+  /* Adjust margins to prevent overlap */
 }
-h3{
-	color:#c7053d;
-	padding-left: 15px;
+
+.h2 {
+  display: inline;
+  padding-right: 10px;
+  color: white;
 }
-h1{
-	color: white;
-	text-align: center;
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #32363e;
+  font-family: Arial, sans-serif;
 }
-hr{
-	width: 97%;
-	border: 2px solid white;
-	border-radius: 5px;
+
+a {
+  text-decoration: none;
 }
-form{
-	display: inline;
+
+.button {
+  background-color: #8cc04b;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 7px 7px 7px 7px;
 }
-.label{
-	background-color: #32363e;
-	color: white;
-	border: solid;
-	border-color: white;
-	border-radius: 15px;
-	padding: 7px 7px 7px 7px;
+
+.red-button {
+  background-color: #c7053d;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 7px 7px 7px 7px;
 }
-.name{
-	color: #8cc04b;
+
+.red-button:hover {
+  background-color: #e30545;
 }
-.path{
-	color: white;
-	display: inline;
+
+.red-button:active {
+  background-color: #e30545;
 }
-.path-2{
-	color: white;
-	padding-left: 0px;
-	padding-right: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
+
+.button:hover {
+  background-color: #93c94f;
 }
-.repo{
-	background-color: #282c34;
-	padding-top: 15px;
-	padding-bottom: 35px;
-	padding-left: 15px;
-	padding-right: 15px;
-	border: none;
-	border-radius: 15px;
-	margin-top: 20px;
-	margin-bottom: 20px;
-	margin-left: 20px;
-	margin-right: 20px;
-	scroll-margin-top: 250px;
+
+.button:active {
+  background-color: #93c94f;
 }
-.repo-2{
-	background-color: #282c34;
-	padding-top: 5px;
-	padding-bottom: 25px;
-	padding-left: 15px;
-	padding-right: 15px;
-	border: none;
-	border-radius: 15px;
-	margin-top: 55px;
-	margin-bottom: 25px;
-	margin-left: 30%;
-	margin-right: 30%;
-	text-align: center;
+
+.button-more {
+  background-color: #8cc04b;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 7px 7px 7px 7px;
+  text-decoration: none !important;
 }
-.login-div{
-	background-color: #282c34;
-	padding-top: 25px;
-	padding-bottom: 25px;
-	border: none;
-	border-radius: 15px;
-	margin-top: 100px;
-	margin-left: 30%;
-	margin-right: 30%;
-	text-align: center;
+
+.button-more:hover {
+  background-color: green;
 }
-.repo-div{
-	background-color: #282c34;
-	padding-top: 25px;
-	padding-bottom: 25px;
-	border: none;
-	border-radius: 15px;
-	padding-left: 25px;
-	padding-right: 25px;
-	text-align: left;
-	margin-top: 30px;
-	margin-bottom: 30px;
-	margin-left: 23%;
-	margin-right: 23%;
-	width: 50%;
+
+.button-more:active {
+  background-color: #8cc04b;
 }
-.filex{
-	background-color: #282c34;
-	padding-top: 15px;
-	padding-bottom: 40px;
-	padding-left: 25px;
-	padding-right: 25px;
-	border-radius: 15px;
-	border: solid 5px;
-	border-color: #32363e;
-	margin-top: 30px;
-	margin-bottom: 30px;
-	margin-left: 30px;
-	margin-right: 30px;
-	text-align: left;
+
+.h2 {
+  display: inline;
+  padding-right: 10px;
+  color: white;
 }
-.repo button{
-	text-align: right;
+
+.login-text {
+  color: white;
+  text-align: center;
 }
-.desc{
-	color: #c7053d;
+
+.logo {
+  width: 200px;
+  height: 200px;
+  margin: none;
+  padding: none;
 }
-.repo button{
-	margin-left: 97%;
+
+h3 {
+  color: #c7053d;
+  padding-left: 15px;
 }
-.copy{
-	display: inline;
+
+h1 {
+  color: white;
+  text-align: center;
 }
-.delete{
-	background-color:#c7053d;
-	color: white;
-	border: none;
-	border-radius: 15px;
-	padding: 7px 7px 7px 7px;
+
+hr {
+  width: 97%;
+  border: 2px solid white;
+  border-radius: 5px;
 }
-.delete:hover{
-	background-color: red;
+
+form {
+  display: inline;
 }
-.repo .commit{
-	text-align: right;
-	display: inline;
+
+.label {
+  background-color: #32363e;
+  color: white;
+  border: solid;
+  border-color: white;
+  border-radius: 15px;
+  padding: 7px 7px 7px 7px;
 }
-.more-link{
-	margin-left: 64%;
-	color: white;
-	text-decoration: none;
-	font-size: 25px;
+
+.name {
+  color: #8cc04b;
 }
-.more-link-2{
-	color: white;
-	text-decoration: none;
+
+.path {
+  color: white;
+  display: inline;
 }
+
+.path-2 {
+  color: white;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.repo {
+  background-color: #282c34;
+  padding-top: 15px;
+  padding-bottom: 35px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: none;
+  border-radius: 15px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  scroll-margin-top: 250px;
+}
+
+.repo-2 {
+  background-color: #282c34;
+  padding-top: 5px;
+  padding-bottom: 25px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: none;
+  border-radius: 15px;
+  margin-top: 55px;
+  margin-bottom: 25px;
+  margin-left: 30%;
+  margin-right: 30%;
+  text-align: center;
+}
+
+.login-div {
+  background-color: #282c34;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  border: none;
+  border-radius: 15px;
+  margin-top: 100px;
+  margin-left: 30%;
+  margin-right: 30%;
+  text-align: center;
+}
+
+.repo-div {
+  background-color: #282c34;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  border: none;
+  border-radius: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
+  text-align: left;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-left: 23%;
+  margin-right: 23%;
+  width: 50%;
+}
+
+.filex {
+  background-color: #282c34;
+  padding-top: 15px;
+  padding-bottom: 40px;
+  padding-left: 25px;
+  padding-right: 25px;
+  border-radius: 15px;
+  border: solid 5px;
+  border-color: #32363e;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-left: 30px;
+  margin-right: 30px;
+  text-align: left;
+}
+
+.repo button {
+  text-align: right;
+}
+
+.desc {
+  color: #c7053d;
+}
+
+.repo button {
+  margin-left: 97%;
+}
+
+.copy {
+  display: inline;
+}
+
+.delete {
+  background-color: #c7053d;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 7px 7px 7px 7px;
+}
+
+.delete:hover {
+  background-color: red;
+}
+
+.repo .commit {
+  text-align: right;
+  display: inline;
+}
+
+
+.more-link-2 {
+  color: white;
+  text-decoration: none;
+}
+
 @font-face {
-    font-family: "DejaVuSansMono";
-    src: url("/static/DejaVuSansMNerdFontMono-Regular.ttf") format("truetype");
+  font-family: "DejaVuSansMono";
+  src: url("/static/DejaVuSansMNerdFontMono-Regular.ttf") format("truetype");
 }
-pre{
-	color: white;
-	font-size: 20px;
-	font-family: DejaVuSansMono, monospace;
-	margin: 0;
-	tab-size: 4;
-	-moz-tab-size: 4;
+
+pre {
+  color: white;
+  font-size: 20px;
+  font-family: DejaVuSansMono, monospace;
+  margin: 0;
+  tab-size: 4;
+  -moz-tab-size: 4;
 }
-.file-tree{
-	line-height: 23px;
+
+.file-tree {
+  line-height: 23px;
 }
-.script{
-	font-size: 15px;
-	font-family: DejaVuSansMono, monospace;
+
+.script {
+  font-size: 15px;
+  font-family: DejaVuSansMono, monospace;
 }
-.repo-h3{
-	color: white;
-	text-align: left;
+
+.repo-h3 {
+  color: white;
+  text-align: left;
 }
-.files{
-	text-align: left;
-	background-color: #32363e;
-	padding-left: 20px;
-	padding-right: 150px;
-	padding-top: 15px;
-	padding-bottom: 15px;
-	border-radius: 15px;
-	overflow-x: auto;
+
+.files {
+  text-align: left;
+  background-color: #32363e;
+  padding-left: 20px;
+  padding-right: 150px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-radius: 15px;
+  overflow-x: auto;
 }
-.files-filex{
-	text-align: left;
-	background-color: #32363e;
-	padding-left: 20px;
-	padding-right: 150px;
-	padding-top: 15px;
-	padding-bottom: 15px;
-	border-radius: 15px;
-	overflow-x: auto;
+
+.files-filex {
+  text-align: left;
+  background-color: #32363e;
+  padding-left: 20px;
+  padding-right: 150px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-radius: 15px;
+  overflow-x: auto;
 }
-select{
-	color: white;
-	border: none;
-	background-color: #32363e;
-	padding-top: 5px;
-	padding-bottom: 8px;
-	border-radius: 10px;
-	margin-top: 15px;
-	padding-left: 15px;
-	font-size: 20px;
+
+select {
+  color: white;
+  border: none;
+  background-color: #32363e;
+  padding-top: 5px;
+  padding-bottom: 8px;
+  border-radius: 10px;
+  margin-top: 15px;
+  padding-left: 15px;
+  font-size: 20px;
 }
-.branch-button{
-	color: white;
-	border: none;
-	background-color: #32363e;
-	padding-top: 7px;
-	padding-bottom: 10px;
-	border-radius: 10px;
-	margin-top: 15px;
-	padding-left: 15px;
-	padding-right: 15px;
-	font-size: 20px;
+
+.branch-button {
+  color: white;
+  border: none;
+  background-color: #32363e;
+  padding-top: 7px;
+  padding-bottom: 10px;
+  border-radius: 10px;
+  margin-top: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  font-size: 20px;
 }
-.branch-button:hover{
-	background-color: #52525e;
+
+.branch-button:hover {
+  background-color: #52525e;
 }
+
 .hljs-ln-numbers {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    text-align: right;
-    color: grey;
-    border-right: 10px solid #282c34;
-    vertical-align: top;
-    padding-right: 5px;
-    }
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-align: right;
+  color: grey;
+  border-right: 10px solid #282c34;
+  vertical-align: top;
+  padding-right: 5px;
+}
+
 .hljs-ln-code {
-	padding-left: 10px;
+  padding-left: 10px;
 }

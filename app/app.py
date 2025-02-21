@@ -165,6 +165,23 @@ def create_repo():
     # refresh the website after form is submitted and processed
     return redirect(url_for("create_repo"))
 
+# searching repositories
+@app.route("/search", methods=["POST"])
+@login_required
+def search():
+    # collecting info on form sumit
+    search = request.form["search"]
+    # redirect to main page if search bar is empty
+    if search == "":
+        return redirect(url_for("create_repo"))
+    # find keys with search string in name
+    search_dict = {}
+    for key in repo_dict:
+        if search in key:
+            # add found items to a new dictionary
+            search_dict[key]=repo_dict[key]
+    # render the website with the results
+    return render_template("index.html", repos=dict(reversed(list(search_dict.items()))))
 
 ############################## More options page ##############################
 

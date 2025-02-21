@@ -9,12 +9,18 @@
 	</head>
 	<body>
 		<div class="topnav">
-			<img src="{{url_for('static', filename='gitpi_logo.png')}}" class="logo-small">
-			<h2 class="h2">GitPi</h2>
-			<form method="POST">
-				<input name="text" placeholder="Name" class="label" autocomplete="off">
-				<input name="desc" placeholder="Description" class="label" autocomplete="off">
- 				<input type="submit" value="Create" class="button">
+			<div class="left-side">
+				<img src="{{url_for('static', filename='gitpi_logo.png')}}" class="logo-small">
+				<h2 class="h2">GitPi</h2>
+				<form method="POST" action="{{url_for('create_repo')}}">
+					<input name="text" placeholder="Name" class="label" autocomplete="off">
+					<input name="desc" placeholder="Description" class="label" autocomplete="off">
+ 					<input type="submit" value="Create" class="button">
+				</form>
+			</div>
+			<form method="POST" action="{{url_for('search')}}">
+				<input name="search" placeholder="Type here to search" class="label" autocomplete="off">
+ 				<input type="submit" value="Search" class="button">
 			</form>
 			<a href="{{url_for('more')}}" class="more-link">&#65049;</a>
 		</div>
