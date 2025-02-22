@@ -438,7 +438,7 @@ def file_viewer(repo, file, branch, nohighlight=""):
             subprocess.check_output(
                 [
                     "git",
-                    f'--git-dir={config_dict["storage_path"]}{repo}.git',
+                    f'--git-dir={path}',
                     "cat-file",
                     "-p",
                     f"{branch}:{file_path}",

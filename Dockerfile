@@ -12,6 +12,9 @@ RUN apt-get update && \
     git \
     && apt-get clean
 
+# Silence git ownership warnings
+RUN git config --global --add safe.directory '*'
+
 # Set workdir and copy the source code
 RUN mkdir /app
 WORKDIR /app
