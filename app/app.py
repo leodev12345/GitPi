@@ -21,10 +21,31 @@ def load_json(file):
     with open(file, "r") as f:
         return json.load(f)
 
+try:
+    docker = os.environ['DOCKER']
+except KeyError:
+    docker = False
 
-# load json values into local dicts
-repo_dict = load_json("database/data.json")
-config_dict = load_json("database/config.json")
+if docker:
+    os.chdir("/app")
+    secret_key = os.urandom(24).hex()
+    config_dict = {
+        "password": os.environ['PASSWORD'],
+        "storage_path": os.environ['STORAGE_PATH'],
+        "server_IP": os.environ['HOST_IP'],
+        "server_user": os.environ['SERVER_USER'],
+        "app_secret_key": secret_key
+    }
+    try:
+        repo_dict = load_json("database/data.json")
+    except FileNotFoundError:
+        os.chdir("/app/database")
+        os.system("echo {} > data.json")
+        repo_dict = load_json("data.json")
+else:
+    # load json values into local dicts
+    repo_dict = load_json("database/data.json")
+    config_dict = load_json("database/config.json")
 
 # app init
 app = Flask(__name__)
@@ -150,7 +171,10 @@ def create_repo():
 
         # create the bare git repo on the server
         dir_name = f"{name}.git"
-        os.chdir(config_dict["storage_path"])
+        if docker:
+            os.chdir("/app/repos")    
+        else:
+            os.chdir(config_dict["storage_path"])
         os.mkdir(dir_name)
         os.chdir(dir_name)
         os.system("git init --bare")
@@ -203,7 +227,10 @@ def rename_repo():
         and old_name in repo_dict
     ):
         # rename git repo on the server
-        os.chdir(config_dict["storage_path"])
+        if docker:
+            os.chdir("/app/repos")
+        else:
+            os.chdir(config_dict["storage_path"])
         os.rename(f"{old_name}.git", f"{new_name}.git")
 
         # rename repo in local dict
@@ -307,15 +334,22 @@ def login_render():
 def login():
     # get the entered password and compare it to stored hashed password
     password = request.form["password"]
-    result = bcrypt.checkpw(
-        password.encode("utf-8"), config_dict["password"].encode("utf-8")
-    )
-    # log in if password is correct and display an error if not
-    if result == True:
-        session["logged-in"] = True
-        return redirect(url_for("index_render"))
+    if docker:
+        if password == config_dict["password"]:
+            session["logged-in"] = True
+            return redirect(url_for("index_render"))
+        else:
+            return render_template("login.html", error="Incorrect password")
     else:
-        return render_template("login.html", error="Incorrect password")
+        result = bcrypt.checkpw(
+            password.encode("utf-8"), config_dict["password"].encode("utf-8")
+        )
+        # log in if password is correct and display an error if not
+        if result == True:
+            session["logged-in"] = True
+            return redirect(url_for("index_render"))
+        else:
+            return render_template("login.html", error="Incorrect password")
 
 
 ############################## Repo info page ##############################
@@ -332,7 +366,10 @@ def repo(repo, selected_branch="main"):
         return redirect(url_for("repo", repo=repo, selected_branch=selected_branch))
     try:
         # get full repository path and chdir into it
-        path = f"{config_dict['storage_path']}{repo}.git"
+        if docker:
+            path = f"/app/repos/{repo}.git"
+        else:
+            path = f"{config_dict['storage_path']}{repo}.git"
         os.chdir(path)
         # get list of repository files and repository commit history
         branches = subprocess.check_output(["git", "branch", "-a"]).decode("utf-8")
@@ -381,7 +418,10 @@ def repo(repo, selected_branch="main"):
 @login_required
 def file_viewer(repo, file, branch, nohighlight=""):
     # get path to selected repository and chdir into it
-    path = f"{config_dict['storage_path']}{repo}.git"
+    if docker:
+        path = f"/app/repos/{repo}.git"
+    else:
+        path = f"{config_dict['storage_path']}{repo}.git"
     os.chdir(path)
     # run git ls-tree and split output into individual lines
     files = subprocess.check_output(
