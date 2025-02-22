@@ -22,7 +22,8 @@ Allows you to have some basic control over your repositories inside your browser
 - Password protected
 - Creating repositories 
 - Renaming repositories 
-- Deleting repositories 
+- Deleting repositories
+- Searching repositories
 - Displaying repository information
    - Name
    - Description
@@ -43,7 +44,7 @@ Login page
 ![Login](./screenshots/login.png)
 
 Homepage
-![Homepage](./screenshots/index_page.png)
+![Homepage](./screenshots/index_page_2.png)
 
 Repository info page
 ![Repo_info](./screenshots/repo_info_page.png)
@@ -73,6 +74,9 @@ Pip:
 You need to have a git server and know how to use it.
 
 There are many guides like [this one](https://pimylifeup.com/raspberry-pi-git-server/) on how to setup a git server.
+
+### Docker
+You can install the app with the provided `compose.yaml` file using docker compose, but you will need to edit some of the contents for it to run on your setup, you will need to specify bind mount points for the apps database dir and the repos dir and you will need to configure the env variables like its specified in the file.
 
 ### 1. Install apt dependencies
 First update apt packages list:
