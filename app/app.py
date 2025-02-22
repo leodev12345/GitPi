@@ -21,6 +21,7 @@ def load_json(file):
     with open(file, "r") as f:
         return json.load(f)
 
+# Check if being run inside docker
 try:
     docker = os.environ['DOCKER']
 except KeyError:
@@ -29,19 +30,35 @@ except KeyError:
 if docker:
     os.chdir("/app")
     secret_key = os.urandom(24).hex()
+    path = os.environ['STORAGE_PATH']
+    # Make sure storage path has a trailing slash
+    if path[-1] != "/":
+        path = path + "/"
+
+    # Set app config for docker enviroment
     config_dict = {
         "password": os.environ['PASSWORD'],
-        "storage_path": os.environ['STORAGE_PATH'],
+        "storage_path": path,
         "server_IP": os.environ['HOST_IP'],
         "server_user": os.environ['SERVER_USER'],
         "app_secret_key": secret_key
     }
+
+    # Create data.json if it does not exist
     try:
         repo_dict = load_json("database/data.json")
     except FileNotFoundError:
         os.chdir("/app/database")
         os.system("echo {} > data.json")
         repo_dict = load_json("data.json")
+    try:
+        with open("database/config.json", "w") as file:
+            file.write(json.dumps(config_dict, indent=4))
+    except FileNotFoundError:
+        os.chdir("/app/database")
+        os.system("echo {} > config.json")
+        with open("database/config.json", "w") as file:
+            file.write(json.dumps(config_dict, indent=4))
 else:
     # load json values into local dicts
     repo_dict = load_json("database/data.json")
