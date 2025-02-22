@@ -1,5 +1,5 @@
 services:
-  gitpi:
+  GitPi:
     image: leodev12345/gitpi:latest 
     container_name: gitpi
     ports:
