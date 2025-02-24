@@ -3,11 +3,16 @@ Description=Gunicorn instance to serve GitPi
 After=network.target
 
 [Service]
+# Set to your user and user group
 User=youruser
 Group=yourgroup
-WorkingDirectory=/path/to/GitPi/app
-Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/path/to/GitPi/venv/bin"
-ExecStart=/path/to/GitPi/venv/bin/gunicorn
+
+# Define the GitPi program path
+Environment="GITPI_DIR=/path/to/GitPi" 
+
+WorkingDirectory=${GITPI_DIR}/app
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${GITPI_DIR}/venv/bin"
+ExecStart=${GITPI_DIR}/venv/bin/gunicorn
 
 [Install]
 WantedBy=multi-user.target

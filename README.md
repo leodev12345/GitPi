@@ -15,7 +15,9 @@
 ## General Information
 A simple Git server web UI app written in python using Flask, it was intended to be used on a raspberry pi but it should work on pretty much any linux machine.
 
-Allows you to have some basic control over your repositories inside your browser so you don't have to SSH into the server every time.
+Allows you to have some basic control over your repositories inside your browser so you don't have to SSH into the server every time to manage your repositories.
+
+Unlike some other solutions due to it's simplicity it uses very little resources, I have been using it for some time now on my main server and it seems to use about 30MB of RAM all the time.
 
 ## Features
 
@@ -61,11 +63,11 @@ More options page
 
 Dependencies
 
-Apt:
+apt:
 - Git
 - Python 3
 
-Pip:
+pip:
 - Flask 
 - Bcrypt
 - Gunicorn
@@ -76,8 +78,68 @@ You need to have a git server and know how to use it.
 There are many guides like [this one](https://pimylifeup.com/raspberry-pi-git-server/) on how to setup a git server.
 
 ### Docker
+> NOTE: The provided Docker image is built for amd64 and arm64 so it should run on most devices but armv6 and armv7 are not supported so Raspberry Pi 1 and original Raspberry Pi Zero are not supported, including early armv7 versions of the Raspberry Pi 2. I had some problems building for armv7 but it is probably possible to build a working image for it, on the other hand finding new base images supporting armv6 is very difficult now so I doubt Pi 1 and 0 will ever be supported, but those devices can still run the app normally [outside of docker](#1.-install-apt-dependencies).
+
 You can install the app with the provided `compose.yaml` file using docker compose, but you will need to edit some of the contents for it to run on your setup, you will need to specify bind mount points for the apps database dir and the repos dir and you will need to configure the env variables like its specified in the file.
 
+Example `compose.yaml` config:
+
+```
+services:
+  GitPi:
+    image: leodev12345/gitpi:latest 
+    container_name: gitpi
+    ports:
+      - 5000:5000
+    environment:
+      PASSWORD: "password123"
+      STORAGE_PATH: "/mnt/raid/gitpi/repos/"
+      SERVER_USER: "leo"
+      HOST_IP: "server.lan"
+    volumes:
+      - /mnt/raid/gitpi/database:/app/database
+      - /mnt/raid/gitpi/repos:/app/repos
+    restart: always
+```
+
+Example Docker CLI command:
+```
+docker run -d -p 5000:5000 \
+  -e PASSWORD="password123" \
+  -e STORAGE_PATH="/mnt/raid/gitpi/repos/" \
+  -e SERVER_USER="leo" \
+  -e HOST_IP="server.lan" \
+  -v /mnt/raid/gitpi/database:/app/database \
+  -v /mnt/raid/gitpi/repos:/app/repos \
+  --name gitpi \
+  leodev12345/gitpi:latest
+```
+
+Port - change it to the port you want to use to access the web UI, default is 5000 (make sure you edit the first number to the port you need and not the second number, the second number must always stay 5000!)
+
+PASSWORD - set it to the password you will use to log in into the web UI
+
+STORAGE_PATH - set it to the path to the dir where all your repositories will be located on the server, it should be the same as the path for the bind mount for the repos directory in the container
+
+SERVER_USER - set this to the username of the linux user you will use to access the git repos over ssh, it will only be shown in the repo path in the web UI. You will use this user to access the git server over ssh when cloning repositories, pushing, etc.
+
+HOST_IP - set this to the IP adress of the host server or to the servers domain, it will only be used to display the full path to the repo in the web UI.
+
+`/app/database` - this is where all the app config will be stored, mount it to some folder on the host system, in this example its mounted to `/mnt/raid/gitpi/database`
+
+`/app/repos` - this is where all the repos will be stored, here in this example `/mnt/raid/gitpi/repos` is mounted to the app repo dir
+
+### Docker(in CasaOS)
+First open the App Store and click "Custom install" in the top right corner than click on the little "import" icon in the top right corner, select Docker Compose and paste(or upload) your `compose.yaml` config and click "Submit".
+
+You will have to manually type in the web ui port in the "Web UI" section, type in the one port which is exposed (in the example above it was 5000).
+
+And lastly if you want you can set an icon by pasting the following icon url inside the "Icon URL" box:
+```
+https://raw.githubusercontent.com/leodev12345/GitPi/main/app/static/gitpi_logo.png
+```
+
+### Setup without Docker
 ### 1. Install apt dependencies
 First update apt packages list:
 
@@ -167,9 +229,66 @@ When you are inside the app directory run the app by using this command:
 
 Now you can access the web UI by typing in `http://your_server_ip:5000` as your browser url bar.
 
+### 6. Run as service (optional)
+If you want gitpi to automaticly start on boot and always run you should set it up as a service, in the repository root a `gitpi.service` file is provided and with a few tweaks it should easily be set up.
+
+Example `gitpi.service` config:
+```
+[Unit]
+Description=Gunicorn instance to serve GitPi
+After=network.target
+
+[Service]
+# Set to your user and user group
+User=leo
+Group=leo
+
+# Define the GitPi program path
+Environment="GITPI_DIR=/home/leo/programs/gitpi" 
+
+WorkingDirectory=${GITPI_DIR}/app
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${GITPI_DIR}/venv/bin"
+ExecStart=${GITPI_DIR}/venv/bin/gunicorn
+
+[Install]
+WantedBy=multi-user.target
+```
+
+User - set it to the user the program should be run as, in this example its set to user leo, if you want to run it as root you can just delete User and Group
+
+Group - set it to your user group of the user you specified, its probably the same as your username
+
+Lastly set GITPI_DIR env variable to the full path to the directory where the gitpi app is stored(where you cloned this repository), in this example path is `/home/leo/programs/gitpi`
+
+Edit the file and save it, than copy the file to `/etc/systemd/system`:
+```
+$ sudo cp /path/to/GitPi/gitpi.service /etc/systemd/system/
+```
+
+Now reload systemd:
+```
+$ sudo systemctl daemon-reload
+```
+
+Enable the service to run it on startup:
+```
+$ sudo systemctl enable gitpi
+```
+
+And lastly start the service:
+```
+$ sudo systemctl start gitpi
+```
+
+You can check the status of the service for errors if you want to:
+```
+$ sudo systemctl status gitpi
+```
 ## Usage
 ### Web UI
 To create repositories you have to enter the name for the repo and click create, description is optional, the app will than init a bare git repository on your server in the storage location you specified in the setup.
+
+You can search repositories using the search bar, clicking search with the empty bar will take you back to the main page
 
 You can view all the repositories you created on the homepage and copy their path with the copy button.
 

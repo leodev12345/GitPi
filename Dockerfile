@@ -30,4 +30,5 @@ RUN python3 -m venv /venv \
 # Expose port for gunicorn
 EXPOSE 5000
 
+# Gunicorn run command
 CMD ["/venv/bin/gunicorn"]
