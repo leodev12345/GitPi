@@ -7,6 +7,7 @@ import subprocess
 import string
 import re
 import getpass
+import secrets
 
 # all charecters allowed in repo names
 allowed_charecters = (
@@ -21,6 +22,36 @@ os.chdir(current_path)
 def load_json(file):
     with open(file, "r") as f:
         return json.load(f)
+
+
+def validate_branch_name(branch):
+    """Validate git ref name to prevent argument injection (CWE-88)."""
+    if not branch:
+        return False
+    if branch.startswith('-'):
+        return False
+    if '..' in branch:
+        return False
+    if not re.match(r'^[a-zA-Z0-9][a-zA-Z0-9._/\-]*$', branch):
+        return False
+    return True
+
+
+def generate_csrf_token():
+    """Generate a CSRF token and store it in the session."""
+    if '_csrf_token' not in session:
+        session['_csrf_token'] = secrets.token_hex(32)
+    return session['_csrf_token']
+
+
+def validate_csrf_token():
+    """Validate the CSRF token from the form against the session token."""
+    token = session.get('_csrf_token', None)
+    form_token = request.form.get('_csrf_token', None)
+    if not token or not form_token or token != form_token:
+        return False
+    return True
+
 
 # Check if being run inside docker
 try:
@@ -68,6 +99,9 @@ else:
 # app init
 app = Flask(__name__)
 app.secret_key = config_dict["app_secret_key"]
+
+# Make CSRF token available in all templates
+app.jinja_env.globals['csrf_token'] = generate_csrf_token
 
 
 # decorator that redirects to login page if user is not logged in
@@ -174,6 +208,8 @@ def index_render():
 @app.route("/", methods=["POST"])
 @login_required
 def create_repo():
+    if not validate_csrf_token():
+        return redirect(url_for("index_render"))
     # collecting info on form sumit
     name = request.form["text"]
     desc = request.form["desc"]
@@ -190,7 +226,7 @@ def create_repo():
         # create the bare git repo on the server
         dir_name = f"{name}.git"
         if docker:
-            os.chdir("/app/repos")    
+            os.chdir("/app/repos")
         else:
             os.chdir(config_dict["storage_path"])
         os.mkdir(dir_name)
@@ -211,6 +247,8 @@ def create_repo():
 @app.route("/search", methods=["POST"])
 @login_required
 def search():
+    if not validate_csrf_token():
+        return redirect(url_for("index_render"))
     # collecting info on form sumit
     search = request.form["search"]
     # redirect to main page if search bar is empty
@@ -232,6 +270,8 @@ def search():
 @app.route("/more/rename", methods=["POST"])
 @login_required
 def rename_repo():
+    if not validate_csrf_token():
+        return redirect(url_for("more_render"))
     # get all the data from the form
     old_name = request.form["old_name"]
     new_name = request.form["new_name"]
@@ -268,6 +308,8 @@ def rename_repo():
 @app.route("/more/delete", methods=["POST"])
 @login_required
 def delete_repo():
+    if not validate_csrf_token():
+        return redirect(url_for("more_render"))
     # get all the data from form
     delete_name = request.form["name_1"]
     delete_name_confirm = request.form["name_2"]
@@ -289,6 +331,8 @@ def delete_repo():
 @app.route("/more/change_desc", methods=["POST"])
 @login_required
 def change_repo_desc():
+    if not validate_csrf_token():
+        return redirect(url_for("more_render"))
     # get all the data from the form
     repo_name = request.form["repo_name"]
     new_desc = request.form["new_desc"]
@@ -332,6 +376,8 @@ def more_render():
 @app.route("/more", methods=["POST"])
 @login_required
 def more():
+    if not validate_csrf_token():
+        return redirect(url_for("more_render"))
     # find which name attribute request.form contains and redirect to proper page
     for key in request.form:
         if key in more_dict:
@@ -379,9 +425,17 @@ def login():
 def repo(repo, selected_branch="main"):
     # if user changed the branch
     if request.method == "POST":
+        if not validate_csrf_token():
+            return redirect(url_for("index_render"))
         selected_branch = request.form.get("branch_select")
+        if not validate_branch_name(selected_branch):
+            return redirect(url_for("index_render"))
         # refreh page
         return redirect(url_for("repo", repo=repo, selected_branch=selected_branch))
+
+    if not validate_branch_name(selected_branch):
+        return redirect(url_for("index_render"))
+
     try:
         # get full repository path and chdir into it
         if docker:
@@ -393,11 +447,11 @@ def repo(repo, selected_branch="main"):
         branches = subprocess.check_output(["git", "branch", "-a"]).decode("utf-8")
         branches = branches.replace("* ", "").replace("  ", "").strip().split("\n")
         files = subprocess.check_output(
-            ["git", "ls-tree", "--name-only", "-r", selected_branch]
+            ["git", "ls-tree", "--name-only", "-r", "--", selected_branch]
         ).decode("utf-8")
         commits = (
             subprocess.check_output(
-                ["git", "log", "--pretty=%B", "--first-parent", selected_branch]
+                ["git", "log", "--pretty=%B", "--first-parent", "--", selected_branch]
             )
             .decode("utf-8")
             .strip()
@@ -435,6 +489,9 @@ def repo(repo, selected_branch="main"):
 @app.route("/<repo>/<branch>/<file>")
 @login_required
 def file_viewer(repo, file, branch, nohighlight=""):
+    if not validate_branch_name(branch):
+        return redirect(url_for("index_render"))
+
     # get path to selected repository and chdir into it
     if docker:
         path = f"/app/repos/{repo}.git"
@@ -443,7 +500,7 @@ def file_viewer(repo, file, branch, nohighlight=""):
     os.chdir(path)
     # run git ls-tree and split output into individual lines
     files = subprocess.check_output(
-        ["git", "ls-tree", "--name-only", "-r", branch]
+        ["git", "ls-tree", "--name-only", "-r", "--", branch]
     ).decode("utf-8")
     files = files.split("\n")
     # get full path to selected file by looping through individual lines and checking if the file matches
@@ -473,7 +530,7 @@ def file_viewer(repo, file, branch, nohighlight=""):
         # get last git commit message
         last_commit = (
             subprocess.check_output(
-                ["git", "log", "-1", branch, "--pretty=%B", "--", file_path]
+                ["git", "log", "-1", "--pretty=%B", "--", file_path]
             )
             .decode("utf-8")
             .strip()
@@ -498,7 +555,7 @@ def file_viewer(repo, file, branch, nohighlight=""):
         lenght = 0
         last_commit = (
             subprocess.check_output(
-                ["git", "log", "-1", branch, "--pretty=%B", "--", file_path]
+                ["git", "log", "-1", "--pretty=%B", "--", file_path]
             )
             .decode("utf-8")
             .strip()
